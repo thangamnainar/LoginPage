@@ -53,11 +53,11 @@ var userEmail = '';
 var DataBase = /** @class */ (function () {
     function DataBase() {
         this._connection = mysql.createConnection({
-            host: '127.0.0.1',
+            host: 'YOUR_HOST',
             port: 3306,
-            user: 'thangam',
-            password: 'Thasan24',
-            database: 'test',
+            user: 'YOUR_USER_NAME',
+            password: 'YOUR_PASSWORD',
+            database: 'YOUR_DATABASE_NAME',
         });
         this._connection.connect(function (err) {
             if (err) {
@@ -253,7 +253,7 @@ var app = new App();
 var sendEmail = /** @class */ (function () {
     function sendEmail() {
         this.emailMessage = {
-            from: 'thangam.nainar0507@gmail.com',
+            from: 'YOUR_EMAIL',
             to: "".concat(userEmail),
             subject: 'Email Verification',
             html: "\n      <p>Please click the following link to verify your email:</p>\n      <p>".concat(verificationCode, "</p>\n    "),
@@ -261,8 +261,8 @@ var sendEmail = /** @class */ (function () {
         this.transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'thangam.nainar0507@gmail.com',
-                pass: 'xlbcpppayugxsamm',
+                user: 'YOUR_EMAIL',
+                pass: 'YOUR_PASSWORD',
             },
         });
         this.sendEmail();
