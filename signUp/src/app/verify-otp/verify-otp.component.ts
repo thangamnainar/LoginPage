@@ -25,8 +25,7 @@ export class VerifyOTPComponent {
         this.route.navigate(['sign-in']);
         }
         console.log('response',response);
-      },
-      error:(error)=>{
+      },error:(error)=>{
         console.log('error.....',error);
       }
     })

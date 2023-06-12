@@ -15,14 +15,43 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
-const create_user_dto_1 = require("./dto/create-user.dto");
-const update_user_dto_1 = require("./dto/update-user.dto");
+const mailer_service_1 = require("../mailer.service");
+const bcrypt = require("bcrypt");
 let UserController = exports.UserController = class UserController {
-    constructor(userService) {
+    constructor(userService, mailerService) {
         this.userService = userService;
+        this.mailerService = mailerService;
     }
-    create(createUserDto) {
-        return this.userService.create(createUserDto);
+    async create(req, res, createUserDto) {
+        try {
+            let email = createUserDto.email;
+            let password = createUserDto.password;
+            const checkEmail = await this.userService.checkEmail(email);
+            if (checkEmail) {
+                if (checkEmail.isVerified == 1) {
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email verified' });
+                }
+                else {
+                    const verifyCode = this.mailerService.generateVerificationCode();
+                    this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode });
+                    await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
+                    console.log('Email sent');
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email not verified', result: 'verifyCode send Your Email' });
+                }
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Email already exists' });
+            }
+            else {
+                const hashPassword = await bcrypt.hash(password, 10);
+                createUserDto.password = hashPassword;
+                createUserDto.verification_code = this.mailerService.generateVerificationCode();
+                const userCreated = await this.userService.createUser(createUserDto);
+                await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${createUserDto.verification_code}`);
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not exists', res: 'userCreated' });
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
     findAll() {
         return this.userService.findAll();
@@ -30,19 +59,18 @@ let UserController = exports.UserController = class UserController {
     findOne(id) {
         return this.userService.findOne(+id);
     }
-    update(id, updateUserDto) {
-        return this.userService.update(+id, updateUserDto);
-    }
     remove(id) {
         return this.userService.remove(+id);
     }
 };
 __decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Post)('createUser'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
 ], UserController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
@@ -58,14 +86,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "update", null);
-__decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -74,6 +94,6 @@ __decorate([
 ], UserController.prototype, "remove", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
-    __metadata("design:paramtypes", [user_service_1.UserService])
+    __metadata("design:paramtypes", [user_service_1.UserService, mailer_service_1.MailerService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

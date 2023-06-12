@@ -32,6 +32,10 @@ let MailerService = exports.MailerService = class MailerService {
             text,
         });
     }
+    generateVerificationCode() {
+        const code = Math.floor(100000 + Math.random() * 900000);
+        return code.toString();
+    }
 };
 exports.MailerService = MailerService = __decorate([
     (0, common_1.Injectable)(),

@@ -11,14 +11,14 @@ export class SignupComponent {
 
   email: string = '';
   password: string = '';
-  name: string = '';
+  userName: string = '';
   postResponse: any;
 
   constructor(private service: ServiceService, private route: Router) { };
   createUser(value: any) {
     this.service.postData(value).subscribe({
       next: (response) => {
-        this.postResponse = (response.error);
+        this.postResponse = (response.res);
         console.log('response', this.postResponse);
                 console.log('response', response);
         if(this.postResponse){

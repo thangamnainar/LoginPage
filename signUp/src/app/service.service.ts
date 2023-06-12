@@ -11,7 +11,8 @@ export class ServiceService {
   postData(data:any){
     console.log('service',data);
     const url = 'http://localhost:3000/adduser';
-    return this.http.post<any>(url,data);
+    const nestUrl='http://localhost:3000/user/createUser'
+    return this.http.post<any>(nestUrl,data);
   }
   verify(otp:any){
     console.log('service',otp);    
