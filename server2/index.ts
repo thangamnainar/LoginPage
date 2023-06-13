@@ -22,11 +22,11 @@ class DataBase {
 
   constructor() {
     this._connection = mysql.createConnection({
-      host: '127.0.0.1',
+      host: 'Your host name',
       port: 3306,
-      user: 'thangam',
-      password: 'Thasan24',
-      database: 'test',
+      user: 'Your user name',
+      password: 'Your password',
+      database: 'Your database name',
     });
 
     this._connection.connect((err) => {
@@ -187,15 +187,15 @@ class sendEmail {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'thangam.nainar0507@gmail.com',
-        pass: 'xlbcpppayugxsamm',
+        user: 'YOUR_EMAIL',
+        pass: ' YOUR_PASSWORD',
       },
     });
     this.sendEmail();
   }
 
   emailMessage = {
-    from: 'thangam.nainar0507@gmail.com',
+    from: 'YOUR_EMAIL',
     to: `${userEmail}`,
     subject: 'Email Verification',
     html: `
