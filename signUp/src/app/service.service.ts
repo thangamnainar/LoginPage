@@ -11,17 +11,21 @@ export class ServiceService {
   postData(data:any){
     console.log('service',data);
     const url = 'http://localhost:3000/adduser';
-    const nestUrl='http://localhost:3000/user/createUser'
+    const nestUrl='http://localhost:3000/user/createUser';
     return this.http.post<any>(nestUrl,data);
   }
-  verify(otp:any){
+  verify(otp:any,email:any){
     console.log('service',otp);    
-    return this.http.put<any>("http://localhost:3000/verify",otp);
+    const url = 'http://localhost:3000/verify';
+    const nestUrl='http://localhost:3000/user/verifyOtp';
+    return this.http.put<any>(nestUrl,{ verifyotp: otp, email: email });
   }
 
   login(data:any){
     console.log('service',data);
-    return this.http.post<any>("http://localhost:3000/login",data);
+    const nestUrl='http://localhost:3000/user/login';
+    const url = 'http://localhost:3000/login';
+    return this.http.post<any>(nestUrl,data);
   }
 
 }

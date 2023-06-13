@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ServiceService } from '../service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-verify-otp',
@@ -11,16 +11,24 @@ export class VerifyOTPComponent {
 
   verifyotp:string='';
   otpResponse:any;
+  email = '';
 
-  constructor(private service:ServiceService,private route:Router) { };
+  constructor(private service:ServiceService,private route:Router,private aRoute:ActivatedRoute) { 
+  
+  };
   
   verifyOtp(value:any){
     console.log(value);
-    this.service.verify(value).subscribe({
+    this.aRoute.queryParams.subscribe((params)=>{
+      console.log(params);
+      this.email = params['email'];
+      console.log(this.email);    
+    })
+    this.service.verify(value.verifyotp,this.email).subscribe({
       next:(response)=>{
-        this.otpResponse=response.error;
+        this.otpResponse=response.res;
         if (this.otpResponse){
-          alert('OTP is wrong');
+          alert('OTP is incorrect');
         }else{
         this.route.navigate(['sign-in']);
         }

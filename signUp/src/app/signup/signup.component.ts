@@ -24,7 +24,7 @@ export class SignupComponent {
         if(this.postResponse){
           // alert('User Already Exist')
         }else{
-          this.route.navigate(['verifyOTP'])
+          this.route.navigate(['verifyOTP'],{queryParams:{email:value.email}})
         }
       },
       error: (error) => {

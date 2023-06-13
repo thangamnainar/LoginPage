@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Res, HttpStatus, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,11 +18,10 @@ export class UserController {
       let email = createUserDto.email;
       let password = createUserDto.password;
       const checkEmail = await this.userService.checkEmail(email);
-      // console.log(checkEmail.isVerified);
 
       if (checkEmail) {
         if (checkEmail.isVerified == 1) {
-          return res.status(HttpStatus.OK).json({ message: 'Email verified' });
+          return res.status(HttpStatus.OK).json({ message: 'Email verified' ,res:true});
         } else {
           const verifyCode = this.mailerService.generateVerificationCode();
           this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode });
@@ -38,7 +37,7 @@ export class UserController {
         const userCreated = await this.userService.createUser(createUserDto);
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${ createUserDto.verification_code }`);
         // console.log(userCreated);        
-        return res.status(HttpStatus.OK).json({ message: 'Email not exists' ,res:'userCreated'});
+        return res.status(HttpStatus.OK).json({ message: 'user created' ,res:false});
       }
     } catch (err) {
       console.log(err);
@@ -46,6 +45,7 @@ export class UserController {
     // return this.userService.create(createUserDto);
   }
 
+  
   @Get()
   findAll() {
     return this.userService.findAll();
@@ -56,10 +56,60 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.updateVerificationCode(+id, updateUserDto);
-  // }
+  @Put('verifyOtp')
+  async update( @Req() req:Request,@Res() res:Response, @Body() updateUserDto: any) {
+    try{
+      let email = updateUserDto.email;
+      let verifyotp = updateUserDto.verifyotp;
+      console.log(email,verifyotp);  
+      console.log(updateUserDto);
+          
+      const checkEmail = await this.userService.checkEmail(email);
+      if (checkEmail) {
+        if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
+          this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1 });
+          return res.status(HttpStatus.OK).json({ message: 'otp verified',res:false});
+        } else {
+          return res.status(HttpStatus.OK).json({ message: 'invalid otp',res:true});
+        }
+        // return { message: 'Email already exists' };
+      } else {
+        return res.status(HttpStatus.OK).json({ message: 'Email not exists' ,res:true});
+      }
+    }catch  (err) {
+      console.log(err);
+    } 
+    // return this.userService.updateVerificationCode(updateUserDto);
+  }
+  @Post('login')
+  async login(@Req() req:Request,@Res() res:Response, @Body() loginUserDto: any) {
+    try{
+      let email = loginUserDto.email;
+      let password = loginUserDto.password;
+      console.log(email,password);
+      
+      const checkEmail = await this.userService.checkEmail(email);
+      
+      if (checkEmail) {
+        if (checkEmail.isVerified == 1) {
+          const match = await bcrypt.compare(password, checkEmail.password);
+          if (match) {
+            return res.status(HttpStatus.OK).json({ message: 'login success',res:false});
+          } else {
+            return res.status(HttpStatus.OK).json({ message: 'invalid password',res:true});
+          }
+        } else {
+          return res.status(HttpStatus.OK).json({ message: 'Email not verified',res:true});
+        }
+        // return { message: 'Email already exists' };
+      } else {
+        return res.status(HttpStatus.OK).json({ message: 'invalid user Or pasword',res:true });
+      }
+    }catch  (err) {
+      console.log(err);
+    }
+    // return this.userService.updateVerificationCode(updateUserDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

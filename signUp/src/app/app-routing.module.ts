@@ -6,7 +6,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 
 const routes: Routes = [
   {
-    path:'',component:SignupComponent
+    path:'',component:SignupComponent,
   },
   {
     path:'verifyOTP',component:VerifyOTPComponent

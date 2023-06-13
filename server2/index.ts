@@ -22,11 +22,11 @@ class DataBase {
 
   constructor() {
     this._connection = mysql.createConnection({
-      host: 'YOUR_HOST',
+      host: '127.0.0.1',
       port: 3306,
-      user: 'YOUR_USER_NAME',
-      password: 'YOUR_PASSWORD',
-      database: 'YOUR_DATABASE_NAME',
+      user: 'thangam',
+      password: 'Thasan24',
+      database: 'test',
     });
 
     this._connection.connect((err) => {
@@ -119,8 +119,10 @@ class App {
   }
 
   public verifyOTP(reg: Request, res: Response) {
-    const { verifyotp } = reg.body;
-    // console.log('////////', verifyotp);
+    const { verifyotp,email } = reg.body;
+    console.log('////////', verifyotp);
+    console.log('////////', email);
+    
     let sql = 'SELECT verification_code FROM sign_up WHERE verification_code = ?';
     this._db.connection.query(sql, [verifyotp], (err: any, result: any) => {
       if (err) {
@@ -185,15 +187,15 @@ class sendEmail {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'YOUR_EMAIL',
-        pass: 'YOUR_PASSWORD',
+        user: 'thangam.nainar0507@gmail.com',
+        pass: 'xlbcpppayugxsamm',
       },
     });
     this.sendEmail();
   }
 
   emailMessage = {
-    from: 'YOUR_EMAIL',
+    from: 'thangam.nainar0507@gmail.com',
     to: `${userEmail}`,
     subject: 'Email Verification',
     html: `

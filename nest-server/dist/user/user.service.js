@@ -22,7 +22,7 @@ let UserService = exports.UserService = class UserService {
         this.userRepository = userRepository;
     }
     async checkEmail(email) {
-        return await this.userRepository.findOne({ where: { email: email }, select: ['id', 'email', 'password', 'isVerified'] });
+        return await this.userRepository.findOne({ where: { email: email }, select: ['id', 'email', 'password', 'isVerified', 'verification_code'] });
     }
     async createUser(createUserDto) {
         return await this.userRepository.save(createUserDto);

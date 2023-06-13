@@ -29,7 +29,7 @@ let UserController = exports.UserController = class UserController {
             const checkEmail = await this.userService.checkEmail(email);
             if (checkEmail) {
                 if (checkEmail.isVerified == 1) {
-                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email verified' });
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email verified', res: true });
                 }
                 else {
                     const verifyCode = this.mailerService.generateVerificationCode();
@@ -46,7 +46,7 @@ let UserController = exports.UserController = class UserController {
                 createUserDto.verification_code = this.mailerService.generateVerificationCode();
                 const userCreated = await this.userService.createUser(createUserDto);
                 await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${createUserDto.verification_code}`);
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not exists', res: 'userCreated' });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'user created', res: false });
             }
         }
         catch (err) {
@@ -58,6 +58,58 @@ let UserController = exports.UserController = class UserController {
     }
     findOne(id) {
         return this.userService.findOne(+id);
+    }
+    async update(req, res, updateUserDto) {
+        try {
+            let email = updateUserDto.email;
+            let verifyotp = updateUserDto.verifyotp;
+            console.log(email, verifyotp);
+            console.log(updateUserDto);
+            const checkEmail = await this.userService.checkEmail(email);
+            if (checkEmail) {
+                if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
+                    this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1 });
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'otp verified', res: false });
+                }
+                else {
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'invalid otp', res: true });
+                }
+            }
+            else {
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not exists', res: true });
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+    async login(req, res, loginUserDto) {
+        try {
+            let email = loginUserDto.email;
+            let password = loginUserDto.password;
+            console.log(email, password);
+            const checkEmail = await this.userService.checkEmail(email);
+            if (checkEmail) {
+                if (checkEmail.isVerified == 1) {
+                    const match = await bcrypt.compare(password, checkEmail.password);
+                    if (match) {
+                        return res.status(common_1.HttpStatus.OK).json({ message: 'login success', res: false });
+                    }
+                    else {
+                        return res.status(common_1.HttpStatus.OK).json({ message: 'invalid password', res: true });
+                    }
+                }
+                else {
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email not verified', res: true });
+                }
+            }
+            else {
+                return res.status(common_1.HttpStatus.OK).json({ message: 'invalid user Or pasword', res: true });
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
     remove(id) {
         return this.userService.remove(+id);
@@ -85,6 +137,24 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Put)('verifyOtp'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)('login'),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "login", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),

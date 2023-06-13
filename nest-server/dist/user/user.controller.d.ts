@@ -8,5 +8,7 @@ export declare class UserController {
     create(req: Request, res: Response, createUserDto: any): Promise<Response<any, Record<string, any>>>;
     findAll(): string;
     findOne(id: string): string;
+    update(req: Request, res: Response, updateUserDto: any): Promise<Response<any, Record<string, any>>>;
+    login(req: Request, res: Response, loginUserDto: any): Promise<Response<any, Record<string, any>>>;
     remove(id: string): string;
 }
