@@ -8,6 +8,7 @@ export declare class UserService {
     findAll(): string;
     findOne(id: number): string;
     updateVerificationCode(id: number, updateUserDto: any): Promise<import("typeorm").UpdateResult>;
+    updatePassword(id: number, updateUserDto: any): Promise<import("typeorm").UpdateResult>;
     update_Attempt_Count(id: any, loginUserDto: any): Promise<import("typeorm").UpdateResult>;
     remove(id: number): string;
 }

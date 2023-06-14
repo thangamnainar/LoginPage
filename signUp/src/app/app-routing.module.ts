@@ -5,6 +5,9 @@ import { SignupComponent } from './signup/signup.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { FormComponent } from './form/form.component';
 import { TableComponent } from './table/table.component';
+import { ForgotMailComponent } from './forgot-mail/forgot-mail.component';
+import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
+import { ForgotPassOtpComponent } from './forgot-pass-otp/forgot-pass-otp.component';
 
 const routes: Routes = [
   {
@@ -21,6 +24,15 @@ const routes: Routes = [
   },
   {
     path:'table',component:TableComponent
+  },
+  {
+    path:'forgot-mail',component:ForgotMailComponent
+  },
+  {
+    path:'forgot-password',component:ForgotPaswordComponent
+  },
+  {
+    path:'forgot-otp',component:ForgotPassOtpComponent
   }
 ];
 

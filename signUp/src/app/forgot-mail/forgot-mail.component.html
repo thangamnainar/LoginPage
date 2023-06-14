@@ -5,20 +5,21 @@
                 <div class="signFormLogo">
                     <img src="../../assets/Frame.svg" alt="">
                 </div>
-                <span class="signInHeader">Create Password</span>
+                <span class="signInHeader">Enter Your Mail</span>
                 <div class="signInput">
                     <form action="" #myform="ngForm">
                         <div class="inputField1">
-                            <label>Password</label>
-                            <input pInputText id="email" aria-describedby="username-help" name="email" placeholder="Email" [(ngModel)]="password"/>
+                            <label> Mail</label>
+                            <input pInputText id="email" aria-describedby="username-help" name="email" placeholder="Email" [(ngModel)]="email"/>
+                            <span *ngIf="getRsponse">Invalid email password</span>
                         </div>
-                        <div class="inputField1">
+                        <!-- <div class="inputField1">
                             <label htmlFor="username">Confirm Password</label>
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="password"[(ngModel)]="confirmPassword"/>
-                            <!-- <span *ngIf="loginResponse">Invalid email or password</span> -->
-                        </div>
+                           
+                        </div> -->
                         <div class="button-sign">
-                            <p-button label="Reset Password" (click)="resetPassword(myform.value)"></p-button>
+                            <p-button label="Next" (click)="getMail(myform.value)"></p-button>
                         </div>  
                         <div class="signInLink">Don't have an Account? <a routerLink="">Sign In</a></div>
                     </form>

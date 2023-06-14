@@ -14,6 +14,8 @@ import { FormComponent } from './form/form.component';
 import { TableComponent } from './table/table.component';
 import { HomeComponent } from './home/home.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
+import { ForgotMailComponent } from './forgot-mail/forgot-mail.component';
+import { ForgotPassOtpComponent } from './forgot-pass-otp/forgot-pass-otp.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.componen
     FormComponent,
     TableComponent,
     HomeComponent,
-    ForgotPaswordComponent
+    ForgotPaswordComponent,
+    ForgotMailComponent,
+    ForgotPassOtpComponent
   ],
   imports: [
     BrowserModule,

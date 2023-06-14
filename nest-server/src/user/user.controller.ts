@@ -11,13 +11,13 @@ export class UserController {
   constructor(private readonly userService: UserService, private mailerService: MailerService) { }
 
   @Post('createUser')
-  async create(@Req() req: Request, @Res() res: Response, @Body() createUserDto: any) {
+  async createUser(@Req() req: Request, @Res() res: Response, @Body() createUserDto: any) {
     try {
       let email = createUserDto.email;
+      // console.log(email);      
       let password = createUserDto.password;
       const checkEmail = await this.userService.checkEmail(email);
-      console.log(checkEmail);
-      
+      // console.log(checkEmail);    
 
       if (checkEmail) {
         if (checkEmail.isVerified == 1) {
@@ -26,6 +26,7 @@ export class UserController {
           const verifyCode = this.mailerService.generateVerificationCode();
           const hashPassword = await bcrypt.hash(password, 10);
           await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, password: hashPassword });
+          // console.log("email",email);          
           await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
           console.log('Email sent');
           return res.status(HttpStatus.OK).json({ message: 'Email not verified', result: 'verifyCode send Your Email' });
@@ -37,8 +38,8 @@ export class UserController {
         const userCreated = await this.userService.createUser(createUserDto);
         const verification_code = this.mailerService.generateVerificationCode();
         await this.userService.updateVerificationCode(userCreated.id, { verification_code: verification_code });
-        await this.mailerService.sendMail('email', 'Verify Email', `Please verify your email ${verification_code}`);
-        // console.log(userCreated);        
+        await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verification_code}`);
+        console.log(userCreated);        
         return res.status(HttpStatus.OK).json({ message: 'user created', res: false });
       }
     } catch (err) {
@@ -57,18 +58,18 @@ export class UserController {
     return this.userService.findOne(+id);
   }
 
+
   @Put('verifyOtp')
-  async update(@Req() req: Request, @Res() res: Response, @Body() updateUserDto: any) {
+  async verifyOTP(@Req() req: Request, @Res() res: Response, @Body() updateUserDto: any) {
     try {
       let email = updateUserDto.email;
       let verifyotp = updateUserDto.verifyotp;
       console.log(email, verifyotp);
-      console.log(updateUserDto);
-
+      // console.log(updateUserDto);
       const checkEmail = await this.userService.checkEmail(email);
       if (checkEmail) {
         if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
-          this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1 });
+          this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1 ,verification_code:null});
           return res.status(HttpStatus.OK).json({ message: 'otp verified', res: false });
         } else {
           return res.status(HttpStatus.OK).json({ message: 'invalid otp', res: true });
@@ -82,13 +83,15 @@ export class UserController {
     }
     // return this.userService.updateVerificationCode(updateUserDto);
   }
+
+
+
   @Post('login')
   async login(@Req() req: Request, @Res() res: Response, @Body() loginUserDto: any) {
     try {
       let email = loginUserDto.email;
       let password = loginUserDto.password;
-      console.log(email, password);
-
+      // console.log(email, password);
       const checkEmail = await this.userService.checkEmail(email);      
       console.log(checkEmail);
       
@@ -127,9 +130,82 @@ export class UserController {
       }
     } catch (err) {
       console.log(err);
+    } 
+    // return this.userService.updateVerificationCode(updateUserDto);
+  }
+
+  @Post('getMail')
+  async forgotPassword(@Req() req: Request, @Res() res: Response, @Body() forgotPasswordDto: any) {
+    try {
+      let email = forgotPasswordDto.email;
+      console.log(email);
+      const checkEmail = await this.userService.checkEmail(email);
+      if (checkEmail && checkEmail.isVerified == 1) {
+        const verifyCode = this.mailerService.generateVerificationCode();
+        await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode });
+        await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
+        console.log('Email sent');
+        return res.status(HttpStatus.OK).json({ message: 'Email sent', result: false });
+      } else {
+        return res.status(HttpStatus.OK).json({ message: 'some thing wrong', result: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @Put('verifyOtpForgotPassword')
+  async verifyOtpForgotPassword(@Req() req: Request, @Res() res: Response, @Body() updateUserDto: any) {
+    try {
+      let email = updateUserDto.email;
+      let verifyotp = updateUserDto.verifyotp;
+      console.log(updateUserDto);
+      const checkEmail = await this.userService.checkEmail(email);
+      if (checkEmail) {
+        if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
+          this.userService.updateVerificationCode(checkEmail.id, { verification_code: null });
+          return res.status(HttpStatus.OK).json({ message: 'otp verified', res: true });
+        } else {
+          return res.status(HttpStatus.OK).json({ message: 'invalid otp', result: false });
+        }
+        // return { message: 'Email already exists' };
+      } else {
+        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', result: false });
+      }
+    } catch (err) {
+      console.log(err);
     }
     // return this.userService.updateVerificationCode(updateUserDto);
   }
+
+  @Put('resetPassword')
+  async resetPassword(@Req() req: Request, @Res() res: Response, @Body() resetPasswordDto: any) {
+    try {
+      let email = resetPasswordDto.email;
+      let verifyotp = resetPasswordDto.otp;
+      let password = resetPasswordDto.password;
+      let confirmPassword = resetPasswordDto.confirmPassword;
+
+      const checkEmail = await this.userService.checkEmail(email);
+      if (checkEmail) {
+        if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
+          if (password === confirmPassword) {
+            const hash = await bcrypt.hash(password, 10);
+            this.userService.updatePassword(checkEmail.id, { verification_code: null, password: hash });
+          }
+        } else {
+          return res.status(HttpStatus.OK).json({ message: 'invalid otp', result: false });
+        }
+        // return { message: 'Email already exists' };
+      } else {
+        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', result: false });
+      }    
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {

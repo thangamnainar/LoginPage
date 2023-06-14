@@ -25,11 +25,12 @@ let MailerService = exports.MailerService = class MailerService {
         });
     }
     async sendMail(to, subject, text) {
+        console.log('to', to);
         await this.transporter.sendMail({
             from: 'thangam.nainar0507@gmail.com',
-            to,
-            subject,
-            text,
+            to: to,
+            subject: subject,
+            text: text,
         });
     }
     generateVerificationCode() {

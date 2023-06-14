@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { MailerService } from './mailer.service';
 import { UserModule } from './user/user.module';
+import { ForgotPassModule } from './forgot-pass/forgot-pass.module';
 
 @Module({
   imports: [
@@ -18,10 +19,11 @@ import { UserModule } from './user/user.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,   
       database: process.env.DATABASE_NAME,
-      // synchronize: true,  
+      synchronize: true,  
       autoLoadEntities: true,
     }),
     UserModule,
+    ForgotPassModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailerService,],

@@ -32,6 +32,10 @@ export class UserService {
     return await this.userRepository.update(id,updateUserDto);
   }
 
+  async updatePassword(id: number, updateUserDto: any) {
+    return await this.userRepository.update(id,updateUserDto);
+  }
+
   async update_Attempt_Count(id:any,loginUserDto:any ){
     return await this.userRepository.update(id,loginUserDto)
 

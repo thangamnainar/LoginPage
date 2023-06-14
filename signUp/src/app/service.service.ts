@@ -28,6 +28,25 @@ export class ServiceService {
     return this.http.post<any>(nestUrl, data);
   }
 
+  //forgot password
+
+  getMail(email: any) {
+    const Url = 'http://localhost:3000/user/getMail';
+    return this.http.post<any>(Url, email);
+  }
+
+  verifyMailOtp(otp: any,email:any) {
+    const Url = 'http://localhost:3000/user/verifyOtpForgotPassword';
+    return this.http.put<any>(Url, {verifyotp:otp,email:email});
+  }
+
+  resetPassword(password: any,email:any,otp:any) {
+    const Url = 'http://localhost:3000/user/resetPassword';
+    return this.http.put<any>(Url, {password:password,email:email,otp:otp});
+  }
+
+  //crud operation
+
   createUser(postData: any) {
     const Url = 'http://localhost:2000/crud/createUser';
     return this.http.post<any>(Url, postData);
@@ -40,7 +59,7 @@ export class ServiceService {
 
   getUserById(id: string | null) {
     const Url = ' http://localhost:2000/crud/user/';
-    return this.http.get<any>(Url+id);
+    return this.http.get<any>(Url + id);
   }
 
   updateUser(updateData: any) {
@@ -52,6 +71,8 @@ export class ServiceService {
     const Url = 'http://localhost:2000/crud/deleteUser';
     return this.http.delete<any>(Url, deleteData);
   }
+
+
 
 }
 export interface post {

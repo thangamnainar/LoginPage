@@ -14,6 +14,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
 const mailer_service_1 = require("./mailer.service");
 const user_module_1 = require("./user/user.module");
+const forgot_pass_module_1 = require("./forgot-pass/forgot-pass.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -29,9 +30,11 @@ exports.AppModule = AppModule = __decorate([
                 username: process.env.DATABASE_USER,
                 password: process.env.DATABASE_PASSWORD,
                 database: process.env.DATABASE_NAME,
+                synchronize: true,
                 autoLoadEntities: true,
             }),
             user_module_1.UserModule,
+            forgot_pass_module_1.ForgotPassModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, mailer_service_1.MailerService,],

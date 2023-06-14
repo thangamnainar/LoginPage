@@ -5,23 +5,29 @@
                 <div class="signFormLogo">
                     <img src="../../assets/Frame.svg" alt="">
                 </div>
-                <span class="signInHeader">Sign In</span>
+                <span class="signInHeader">Create an Account</span>
                 <div class="signInput">
                     <form action="" #myform="ngForm">
+                        <!-- <div class="inputField1">
+                            <label>Your Name</label>
+                            <input pInputText id="name" aria-describedby="username-help" placeholder="Name" name="name" [(ngModel)]="name"/>
+                        </div>
                         <div class="inputField1">
                             <label>Email ID</label>
                             <input pInputText id="email" aria-describedby="username-help" name="email" placeholder="Email" [(ngModel)]="email"/>
-                        </div>
+                        </div> -->
                         <div class="inputField1">
-                            <label htmlFor="username">Password</label>
-                            <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="password"[(ngModel)]="password"/>
-                            <span *ngIf="loginResponse">Invalid email or password</span>
-                            <span><a routerLink="/forgot-mail">Forgot Password</a></span>
+                            <label htmlFor="username">Enter OTP</label>
+                            <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="verifyotp"[(ngModel)]="verifyotp"/><br>
+                            <!-- <span *ngIf="otpResponse">Invalid OTP</span> -->
+                        </div>
+                        <div class="">
+                            Didn't get the OTP? <a href="">Resend</a>
                         </div>
                         <div class="button-sign">
-                            <p-button label="Sign In" (click)="login(myform.value)"></p-button>
+                            <p-button label="Verify" (click)="verifyOtp(myform.value)"></p-button>
                         </div>  
-                        <div class="signInLink">Don't have an Account? <a routerLink="">Sign Up</a></div>
+                        <!-- <div class="signInLink">All ready have an Account? <a href="signIn">Sign in</a></div> -->
                     </form>
                 </div>
                 <div>
@@ -44,5 +50,3 @@
 
     </div>
 </section>
-
-<router-outlet></router-outlet>

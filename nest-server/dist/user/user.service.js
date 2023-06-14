@@ -36,6 +36,9 @@ let UserService = exports.UserService = class UserService {
     async updateVerificationCode(id, updateUserDto) {
         return await this.userRepository.update(id, updateUserDto);
     }
+    async updatePassword(id, updateUserDto) {
+        return await this.userRepository.update(id, updateUserDto);
+    }
     async update_Attempt_Count(id, loginUserDto) {
         return await this.userRepository.update(id, loginUserDto);
     }

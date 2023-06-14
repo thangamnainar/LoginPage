@@ -5,10 +5,13 @@ export declare class UserController {
     private readonly userService;
     private mailerService;
     constructor(userService: UserService, mailerService: MailerService);
-    create(req: Request, res: Response, createUserDto: any): Promise<Response<any, Record<string, any>>>;
+    createUser(req: Request, res: Response, createUserDto: any): Promise<Response<any, Record<string, any>>>;
     findAll(): string;
     findOne(id: string): string;
-    update(req: Request, res: Response, updateUserDto: any): Promise<Response<any, Record<string, any>>>;
+    verifyOTP(req: Request, res: Response, updateUserDto: any): Promise<Response<any, Record<string, any>>>;
     login(req: Request, res: Response, loginUserDto: any): Promise<Response<any, Record<string, any>>>;
+    forgotPassword(req: Request, res: Response, forgotPasswordDto: any): Promise<Response<any, Record<string, any>>>;
+    verifyOtpForgotPassword(req: Request, res: Response, updateUserDto: any): Promise<Response<any, Record<string, any>>>;
+    resetPassword(req: Request, res: Response, resetPasswordDto: any): Promise<Response<any, Record<string, any>>>;
     remove(id: string): string;
 }

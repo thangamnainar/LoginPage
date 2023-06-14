@@ -1,0 +1,95 @@
+.signInPage{
+    height: 100vh;
+    margin: 0;
+    .signForm{
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        .signIN{
+            display: flex;
+            flex-direction: column;
+            // margin-left: 143px;
+         .signFormLogo{
+            margin-top: 79px;
+         }
+         .signInHeader{
+            margin-top: 59px;
+            font-family: 'Figtree', sans-serif;
+            font-weight: 500;
+            font-size: 38px;
+         }
+         .signInput{
+             margin-top: 34px;
+             .inputField1{
+                display: flex;
+                flex-direction: column;
+                // margin-right: 172px;
+                font-family: 'Figtree', sans-serif;
+                font-weight: 500;
+                font-size: 14px;
+                margin-bottom:22px;
+                
+                input{
+                    margin-top: 6px;
+                    width: 398px;
+                    padding: 9px 12px;
+                }
+                span{
+                    color: red;
+                }
+             }
+             
+             .button-sign{
+                 margin-top: 52px;
+            
+             }
+             .signInLink{
+                margin-top: 24px;
+                display: flex;
+                justify-content: center;
+                font-family: 'Figtree', sans-serif;
+                font-weight: 400;
+                font-size: 12px;
+                text-align: center;
+                color: #A2A2A2;
+                a{
+                    padding-left: 3px;
+                    color:#2F80ED;
+                }
+
+             }
+            }
+            .para{
+             margin-top: 60px;
+             display: flex;
+             justify-content: center;
+            p{
+                font-family: 'Figtree', sans-serif;
+                font-weight: 400;
+                font-size: 12px;
+                width: 290px;
+                text-align: center;
+                margin: 0;
+                a{
+                   color:#2F80ED;
+               }
+            }
+            }
+            .CopyRightsPara{
+             font-family: 'Figtree', sans-serif;
+             font-weight: 400;
+             font-size: 12px;
+             color: #A2A2A2;
+             text-align: center;
+             margin-top: 19px;
+            }
+        }
+    }
+    .signInImage{
+        background-color: #FFBA08;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+}
