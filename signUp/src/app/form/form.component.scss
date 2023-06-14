@@ -1,0 +1,21 @@
+.form-filed{
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+
+    .form-tag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50vh;
+        width: 40vh;
+        flex-direction: column;
+        border: 2px solid red;
+    }
+
+    .form-group {
+        padding: 25px;
+
+    }
+}

@@ -18,7 +18,7 @@ export class SignInComponent {
     this.service.login(value).subscribe({
       next: (response) => {
         this.loginResponse = response.res;
-        console.log('Login Successfully', response);
+        console.log('reponse', response);
       },
       error: (error) => {
         console.log('error', error);

@@ -1,0 +1,22 @@
+<div class="studentTable">
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of getUsers">
+                <td>{{user.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.age}}</td>
+                <td>{{user.gender}}</td>
+                <td><button (click)="edit(user.id)">Edit</button> <button (click)="delete(user.id)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

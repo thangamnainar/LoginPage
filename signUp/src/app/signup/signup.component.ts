@@ -19,7 +19,7 @@ export class SignupComponent {
     this.service.postData(value).subscribe({
       next: (response) => {
         this.postResponse = (response.res);
-        console.log('response', this.postResponse);
+        // console.log('response', this.postResponse);
                 console.log('response', response);
         if(this.postResponse){
           // alert('User Already Exist')

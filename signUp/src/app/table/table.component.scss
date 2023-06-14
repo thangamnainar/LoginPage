@@ -1,0 +1,11 @@
+.studentTable{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    td,th{
+        border: 1px solid;
+        padding: 8px;
+
+    }
+}

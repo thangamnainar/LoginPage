@@ -19,7 +19,7 @@ export class MailerService {
 
   async sendMail(to: string, subject: string, text: string): Promise<void> {
     await this.transporter.sendMail({
-      from: 'your_email@example.com',
+      from: 'thangam.nainar0507@gmail.com',
       to,
       subject,
       text,

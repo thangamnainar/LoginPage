@@ -22,6 +22,12 @@ export class User {
     @Column({default:false})
     isVerified: number;
 
+    @Column({default:false})
+    attempt_Count:number
+
+    @Column({nullable:true})
+    attempt_Time:string
+
     @CreateDateColumn()
     createdAt: Date;
 

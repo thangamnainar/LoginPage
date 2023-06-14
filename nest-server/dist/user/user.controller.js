@@ -27,25 +27,27 @@ let UserController = exports.UserController = class UserController {
             let email = createUserDto.email;
             let password = createUserDto.password;
             const checkEmail = await this.userService.checkEmail(email);
+            console.log(checkEmail);
             if (checkEmail) {
                 if (checkEmail.isVerified == 1) {
                     return res.status(common_1.HttpStatus.OK).json({ message: 'Email verified', res: true });
                 }
                 else {
                     const verifyCode = this.mailerService.generateVerificationCode();
-                    this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode });
+                    const hashPassword = await bcrypt.hash(password, 10);
+                    await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, password: hashPassword });
                     await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
                     console.log('Email sent');
                     return res.status(common_1.HttpStatus.OK).json({ message: 'Email not verified', result: 'verifyCode send Your Email' });
                 }
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email already exists' });
             }
             else {
                 const hashPassword = await bcrypt.hash(password, 10);
                 createUserDto.password = hashPassword;
-                createUserDto.verification_code = this.mailerService.generateVerificationCode();
                 const userCreated = await this.userService.createUser(createUserDto);
-                await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${createUserDto.verification_code}`);
+                const verification_code = this.mailerService.generateVerificationCode();
+                await this.userService.updateVerificationCode(userCreated.id, { verification_code: verification_code });
+                await this.mailerService.sendMail('email', 'Verify Email', `Please verify your email ${verification_code}`);
                 return res.status(common_1.HttpStatus.OK).json({ message: 'user created', res: false });
             }
         }
@@ -76,7 +78,7 @@ let UserController = exports.UserController = class UserController {
                 }
             }
             else {
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not exists', res: true });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not ex ists', res: true });
             }
         }
         catch (err) {
@@ -89,22 +91,35 @@ let UserController = exports.UserController = class UserController {
             let password = loginUserDto.password;
             console.log(email, password);
             const checkEmail = await this.userService.checkEmail(email);
-            if (checkEmail) {
-                if (checkEmail.isVerified == 1) {
+            console.log(checkEmail);
+            let maxTime = 1 * 60 * 1000;
+            if (checkEmail && checkEmail.isVerified == 1) {
+                if (checkEmail.attempt_Count < 3) {
                     const match = await bcrypt.compare(password, checkEmail.password);
                     if (match) {
                         return res.status(common_1.HttpStatus.OK).json({ message: 'login success', res: false });
                     }
                     else {
+                        const attempt_Time = Date.now();
+                        console.log(attempt_Time);
+                        let thrrottleCount = checkEmail.attempt_Count;
+                        await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
+                        console.log('password not match');
                         return res.status(common_1.HttpStatus.OK).json({ message: 'invalid password', res: true });
                     }
                 }
                 else {
-                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email not verified', res: true });
+                    let current_Time = Date.now();
+                    if ((current_Time - +checkEmail.attempt_Time) > maxTime) {
+                        await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
+                        console.log('un Block');
+                        return res.status(common_1.HttpStatus.OK).json({ message: 'unBlock', res: false });
+                    }
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'Blocked', res: true });
                 }
             }
             else {
-                return res.status(common_1.HttpStatus.OK).json({ message: 'invalid user Or pasword', res: true });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'invalid user Or password', res: true });
             }
         }
         catch (err) {

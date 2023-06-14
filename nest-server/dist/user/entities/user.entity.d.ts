@@ -5,6 +5,8 @@ export declare class User {
     password: string;
     verification_code: string;
     isVerified: number;
+    attempt_Count: number;
+    attempt_Time: string;
     createdAt: Date;
     createBy: number;
     updatedAt: Date;

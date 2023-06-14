@@ -26,7 +26,7 @@ let MailerService = exports.MailerService = class MailerService {
     }
     async sendMail(to, subject, text) {
         await this.transporter.sendMail({
-            from: 'your_email@example.com',
+            from: 'thangam.nainar0507@gmail.com',
             to,
             subject,
             text,
