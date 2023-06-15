@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
+const update_user_dto_1 = require("./dto/update-user.dto");
 const mailer_service_1 = require("../mailer.service");
+const swagger_1 = require("@nestjs/swagger");
 const bcrypt = require("bcrypt");
 let UserController = exports.UserController = class UserController {
     constructor(userService, mailerService) {
@@ -152,15 +154,14 @@ let UserController = exports.UserController = class UserController {
             const checkEmail = await this.userService.checkEmail(email);
             if (checkEmail) {
                 if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
-                    this.userService.updateVerificationCode(checkEmail.id, { verification_code: null });
-                    return res.status(common_1.HttpStatus.OK).json({ message: 'otp verified', res: true });
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'otp verified', result: false });
                 }
                 else {
-                    return res.status(common_1.HttpStatus.OK).json({ message: 'invalid otp', result: false });
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'invalid otp', result: true });
                 }
             }
             else {
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not ex ists', result: false });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not ex ists', result: true });
             }
         }
         catch (err) {
@@ -172,21 +173,27 @@ let UserController = exports.UserController = class UserController {
             let email = resetPasswordDto.email;
             let verifyotp = resetPasswordDto.otp;
             let password = resetPasswordDto.password;
-            let confirmPassword = resetPasswordDto.confirmPassword;
+            let confirmPassword = resetPasswordDto.confirm_password;
+            console.log(resetPasswordDto, verifyotp);
             const checkEmail = await this.userService.checkEmail(email);
             if (checkEmail) {
-                if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
-                    if (password === confirmPassword) {
+                if (+checkEmail.verification_code === +verifyotp) {
+                    if (+password === +confirmPassword) {
                         const hash = await bcrypt.hash(password, 10);
-                        this.userService.updatePassword(checkEmail.id, { verification_code: null, password: hash });
+                        this.userService.updatePassword(checkEmail.id, { verification_code: null, password: password });
+                        this.userService.updateVerificationCode(checkEmail.id, { verification_code: null });
+                        return res.status(common_1.HttpStatus.OK).json({ message: 'update pass successfully', result: false });
+                    }
+                    else {
+                        return res.status(common_1.HttpStatus.OK).json({ message: 'password not match', result: true });
                     }
                 }
                 else {
-                    return res.status(common_1.HttpStatus.OK).json({ message: 'invalid otp', result: false });
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'invalid otp', result: true });
                 }
             }
             else {
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not ex ists', result: false });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Email not ex ists', result: true });
             }
         }
         catch (err) {
@@ -252,7 +259,7 @@ __decorate([
     __param(1, (0, common_1.Res)()),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:paramtypes", [Object, Object, update_user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyOtpForgotPassword", null);
 __decorate([
@@ -273,6 +280,7 @@ __decorate([
 ], UserController.prototype, "remove", null);
 exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
+    (0, swagger_1.ApiTags)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService, mailer_service_1.MailerService])
 ], UserController);
 //# sourceMappingURL=user.controller.js.map

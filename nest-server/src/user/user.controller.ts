@@ -4,9 +4,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request, Response } from 'express';
 import { MailerService } from 'src/mailer.service';
+import { ApiTags } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 
 @Controller('user')
+@ApiTags('user')
 export class UserController {
   constructor(private readonly userService: UserService, private mailerService: MailerService) { }
 
@@ -39,7 +41,7 @@ export class UserController {
         const verification_code = this.mailerService.generateVerificationCode();
         await this.userService.updateVerificationCode(userCreated.id, { verification_code: verification_code });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verification_code}`);
-        console.log(userCreated);        
+        console.log(userCreated);
         return res.status(HttpStatus.OK).json({ message: 'user created', res: false });
       }
     } catch (err) {
@@ -69,7 +71,7 @@ export class UserController {
       const checkEmail = await this.userService.checkEmail(email);
       if (checkEmail) {
         if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
-          this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1 ,verification_code:null});
+          this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1, verification_code: null });
           return res.status(HttpStatus.OK).json({ message: 'otp verified', res: false });
         } else {
           return res.status(HttpStatus.OK).json({ message: 'invalid otp', res: true });
@@ -92,11 +94,11 @@ export class UserController {
       let email = loginUserDto.email;
       let password = loginUserDto.password;
       // console.log(email, password);
-      const checkEmail = await this.userService.checkEmail(email);      
+      const checkEmail = await this.userService.checkEmail(email);
       console.log(checkEmail);
-      
+
       // console.log(thrrottleCount);
-      
+
       let maxTime = 1 * 60 * 1000;
       if (checkEmail && checkEmail.isVerified == 1) {
         if (checkEmail.attempt_Count < 3) {
@@ -115,13 +117,12 @@ export class UserController {
         } else {
           let current_Time = Date.now();
           if ((current_Time - +checkEmail.attempt_Time) > maxTime) {
-            await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0 , attempt_Time: null});
-            console.log('un Block');            
+            await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
+            console.log('un Block');
             return res.status(HttpStatus.OK).json({ message: 'unBlock', res: false });
           }
           return res.status(HttpStatus.OK).json({ message: 'Blocked', res: true });
         }
-        // return { message: 'Email already exists' };
       } else {
         // const attempt_Time = Date.now();
         // await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
@@ -130,7 +131,7 @@ export class UserController {
       }
     } catch (err) {
       console.log(err);
-    } 
+    }
     // return this.userService.updateVerificationCode(updateUserDto);
   }
 
@@ -155,7 +156,7 @@ export class UserController {
   }
 
   @Put('verifyOtpForgotPassword')
-  async verifyOtpForgotPassword(@Req() req: Request, @Res() res: Response, @Body() updateUserDto: any) {
+  async verifyOtpForgotPassword(@Req() req: Request, @Res() res: Response, @Body() updateUserDto: UpdateUserDto) {
     try {
       let email = updateUserDto.email;
       let verifyotp = updateUserDto.verifyotp;
@@ -163,14 +164,13 @@ export class UserController {
       const checkEmail = await this.userService.checkEmail(email);
       if (checkEmail) {
         if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
-          this.userService.updateVerificationCode(checkEmail.id, { verification_code: null });
-          return res.status(HttpStatus.OK).json({ message: 'otp verified', res: true });
+          return res.status(HttpStatus.OK).json({ message: 'otp verified', result: false });
         } else {
-          return res.status(HttpStatus.OK).json({ message: 'invalid otp', result: false });
+          return res.status(HttpStatus.OK).json({ message: 'invalid otp', result: true });
         }
         // return { message: 'Email already exists' };
       } else {
-        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', result: false });
+        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', result: true });
       }
     } catch (err) {
       console.log(err);
@@ -184,22 +184,26 @@ export class UserController {
       let email = resetPasswordDto.email;
       let verifyotp = resetPasswordDto.otp;
       let password = resetPasswordDto.password;
-      let confirmPassword = resetPasswordDto.confirmPassword;
+      let confirmPassword = resetPasswordDto.confirm_password;
+      console.log(resetPasswordDto,verifyotp);
 
       const checkEmail = await this.userService.checkEmail(email);
       if (checkEmail) {
-        if (parseInt(checkEmail.verification_code) === parseInt(verifyotp)) {
-          if (password === confirmPassword) {
+        if (+checkEmail.verification_code === +verifyotp) {
+          if (+password === +confirmPassword) {
             const hash = await bcrypt.hash(password, 10);
-            this.userService.updatePassword(checkEmail.id, { verification_code: null, password: hash });
+            this.userService.updatePassword(checkEmail.id, { verification_code: null, password: password });
+            this.userService.updateVerificationCode(checkEmail.id, { verification_code: null });
+            return res.status(HttpStatus.OK).json({ message: 'update pass successfully', result: false }); 
+          }else{
+            return res.status(HttpStatus.OK).json({ message: 'password not match', result: true });
           }
-        } else {
-          return res.status(HttpStatus.OK).json({ message: 'invalid otp', result: false });
+        }else{
+          return res.status(HttpStatus.OK).json({ message: 'invalid otp', result: true });
         }
-        // return { message: 'Email already exists' };
       } else {
-        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', result: false });
-      }    
+        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', result: true });
+      }
 
     } catch (err) {
       console.log(err);

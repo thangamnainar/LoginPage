@@ -10,12 +10,12 @@
                     <form action="" #myform="ngForm">
                         <div class="inputField1">
                             <label>Password</label>
-                            <input pInputText id="email" aria-describedby="username-help" name="email" placeholder="Email" [(ngModel)]="password"/>
+                            <input pInputText id="email" aria-describedby="username-help" name="password" placeholder="Email" [(ngModel)]="password"/>
                         </div>
                         <div class="inputField1">
                             <label htmlFor="username">Confirm Password</label>
-                            <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="password"[(ngModel)]="confirmPassword"/>
-                            <!-- <span *ngIf="loginResponse">Invalid email or password</span> -->
+                            <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="confirm_password"[(ngModel)]="confirmPassword"/>
+                            <span *ngIf="getResponse">Some thing wrong</span>
                         </div>
                         <div class="button-sign">
                             <p-button label="Reset Password" (click)="resetPassword(myform.value)"></p-button>

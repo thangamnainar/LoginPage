@@ -40,9 +40,11 @@ export class ServiceService {
     return this.http.put<any>(Url, {verifyotp:otp,email:email});
   }
 
-  resetPassword(password: any,email:any,otp:any) {
+  resetPassword(value: any,email:any,otp:any) {
     const Url = 'http://localhost:3000/user/resetPassword';
-    return this.http.put<any>(Url, {password:password,email:email,otp:otp});
+    console.log({password:value.password, confirm_password:value.confirm_password, email:email, otp:otp},'service');
+    
+    return this.http.put<any>(Url, {password:value.password,confirm_password:value.confirm_password,email:email,otp:otp});
   }
 
   //crud operation

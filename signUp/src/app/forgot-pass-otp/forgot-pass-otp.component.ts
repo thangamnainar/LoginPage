@@ -10,8 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ForgotPassOtpComponent implements OnInit{
 
   verifyotp: string = '';
-
-  constructor(private service:ServiceService,private router:Router) { }
+  otpResponse:any;
+  constructor(private service:ServiceService,private router:Router,private activateRouter:ActivatedRoute) { }
 
   ngOnInit(){
    let  email = localStorage.getItem('email');
@@ -22,18 +22,17 @@ export class ForgotPassOtpComponent implements OnInit{
    let  email = localStorage.getItem('email');
     this.service.verifyMailOtp(value.verifyotp,email).subscribe({
       next: (response) => {
+        this.otpResponse = response.result;
         console.log('response', response);
-        if (response.res) {
-          alert('OTP is incorrect');
-        } else {
-          this.router.navigate(['reset-password']);
+        if (!(response.result)) {
+          this.router.navigate(['forgot-password',value.verifyotp]);
+          // this.router.navigate(['forgot-password']);
         }
       }, error: (error) => {
         console.log('error', error);
       }
     })
 
-    this.router.navigate(['forgot-password']);
   }
 
 }

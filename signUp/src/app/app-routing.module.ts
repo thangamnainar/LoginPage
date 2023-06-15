@@ -29,6 +29,9 @@ const routes: Routes = [
     path:'forgot-mail',component:ForgotMailComponent
   },
   {
+    path:'forgot-password/:otp',component:ForgotPaswordComponent
+  },
+  {
     path:'forgot-password',component:ForgotPaswordComponent
   },
   {

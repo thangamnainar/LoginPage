@@ -5,7 +5,7 @@
                 <div class="signFormLogo">
                     <img src="../../assets/Frame.svg" alt="">
                 </div>
-                <span class="signInHeader">Create an Account</span>
+                <span class="signInHeader">Verify OTP</span>
                 <div class="signInput">
                     <form action="" #myform="ngForm">
                         <!-- <div class="inputField1">
@@ -19,7 +19,7 @@
                         <div class="inputField1">
                             <label htmlFor="username">Enter OTP</label>
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="verifyotp"[(ngModel)]="verifyotp"/><br>
-                            <!-- <span *ngIf="otpResponse">Invalid OTP</span> -->
+                            <span *ngIf="otpResponse">Invalid OTP</span>
                         </div>
                         <div class="">
                             Didn't get the OTP? <a href="">Resend</a>

@@ -1,19 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ServiceService } from '../service.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-pasword',
   templateUrl: './forgot-pasword.component.html',
   styleUrls: ['./forgot-pasword.component.scss']
 })
-export class ForgotPaswordComponent {
+export class ForgotPaswordComponent implements OnInit {
 
   password: string = '';
   confirmPassword: string = '';
+  getOtp: any;
+  getResponse: any;
 
-  constructor() { }
+  constructor(private service: ServiceService, private activateRouter: ActivatedRoute) { }
 
+  ngOnInit() {
+    this.getOtp = this.activateRouter.snapshot.paramMap.get('otp');
+    console.log('getOtp', this.getOtp);
+  }
   resetPassword(value: any) {
-    console.log('value', value);
+    let getMail = localStorage.getItem('email');
+    // console.log('value', value,);
+    this.service.resetPassword(value, getMail, this.getOtp).subscribe({
+      next: (response) => {
+        this.getResponse = response.result;
+        console.log('response', response);
+      }, error: (error) => {
+        console.log('error', error);
+      }
+    })
   }
 
 }
