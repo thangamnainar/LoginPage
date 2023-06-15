@@ -16,7 +16,7 @@
                             <label htmlFor="username">Password</label>
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="password"[(ngModel)]="password"/>
                             <span *ngIf="loginResponse">Invalid email or password</span>
-                            <span><a routerLink="/forgot-mail">Forgot Password</a></span>
+                            <span><a routerLink="/forgot-mail">Forgot Password ?</a></span>
                         </div>
                         <div class="button-sign">
                             <p-button label="Sign In" (click)="login(myform.value)"></p-button>
@@ -39,9 +39,8 @@
             <!-- {{myform.value|json}} -->
         </div>
         <div class="col-6 signInImage">
-            <img src="../../assets/Union.svg" alt="">
+            <img src="../../assets/Group 6 (1).png" alt="">
         </div>
-
     </div>
 </section>
 

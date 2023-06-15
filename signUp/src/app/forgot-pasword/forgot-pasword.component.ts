@@ -10,7 +10,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ForgotPaswordComponent implements OnInit {
 
   password: string = '';
-  confirmPassword: string = '';
   getOtp: any;
   getResponse: any;
 
@@ -22,7 +21,7 @@ export class ForgotPaswordComponent implements OnInit {
   }
   resetPassword(value: any) {
     let getMail = localStorage.getItem('email');
-    // console.log('value', value,);
+    console.log('value', value,);
     this.service.resetPassword(value, getMail, this.getOtp).subscribe({
       next: (response) => {
         this.getResponse = response.result;

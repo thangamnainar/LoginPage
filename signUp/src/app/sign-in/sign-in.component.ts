@@ -17,8 +17,12 @@ export class SignInComponent {
   login(value: any) {
     this.service.login(value).subscribe({
       next: (response) => {
+
         this.loginResponse = response.res;
         console.log('reponse', response);
+
+        this.route.navigate(['home']);
+
       },
       error: (error) => {
         console.log('error', error);

@@ -5,5 +5,6 @@ export declare class UpdateUserDto extends UpdateUserDto_base {
     password: string;
     isVerified: boolean;
     verifyotp: string;
+    otp: string;
 }
 export {};

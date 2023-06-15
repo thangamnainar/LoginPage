@@ -15,4 +15,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
     @ApiProperty()
     verifyotp: string;
+
+    @ApiProperty()
+    otp: string;
 }

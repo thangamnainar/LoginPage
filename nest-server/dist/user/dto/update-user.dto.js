@@ -32,4 +32,8 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "verifyotp", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "otp", void 0);
 //# sourceMappingURL=update-user.dto.js.map

@@ -44,7 +44,7 @@ export class ServiceService {
     const Url = 'http://localhost:3000/user/resetPassword';
     console.log({password:value.password, confirm_password:value.confirm_password, email:email, otp:otp},'service');
     
-    return this.http.put<any>(Url, {password:value.password,confirm_password:value.confirm_password,email:email,otp:otp});
+    return this.http.put<any>(Url, {password:value.password,email:email,otp:otp});
   }
 
   //crud operation

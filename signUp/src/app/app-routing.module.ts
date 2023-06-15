@@ -8,10 +8,11 @@ import { TableComponent } from './table/table.component';
 import { ForgotMailComponent } from './forgot-mail/forgot-mail.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
 import { ForgotPassOtpComponent } from './forgot-pass-otp/forgot-pass-otp.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
-    path:'',component:SignupComponent,
+    path:'',redirectTo:'signup',pathMatch:'full'
   },
   {
     path:'verifyOTP',component:VerifyOTPComponent
@@ -36,7 +37,26 @@ const routes: Routes = [
   },
   {
     path:'forgot-otp',component:ForgotPassOtpComponent
-  }
+  }, {
+    path:'signup',component:SignupComponent
+  },
+  // {
+  //   path:'home',component:HomeComponent ,
+  //   children:[
+  //     {
+  //       path:'sign-in',component:SignInComponent,
+  //       children :[{
+  //         path:'form/:id',component:FormComponent,
+  //         children : [{
+  //           path:'table',component:TableComponent
+  //         }]
+  //       }]
+  //     }, {
+  //       path:'form/:id',component:FormComponent
+  //     }
+  //   ]
+
+  // }
 ];
 
 @NgModule({
