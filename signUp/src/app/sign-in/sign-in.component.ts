@@ -1,34 +1,47 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { ServiceService } from '../service.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  styleUrls: ['./sign-in.component.scss'],
+  providers: [MessageService]
 })
-export class SignInComponent {
+export class SignInComponent implements OnInit{
+
+  visible=true
 
   email: string = '';
   password: string = '';
   loginResponse: any;
-  constructor(private service: ServiceService,private route:Router) { };
-  
+  constructor(private service: ServiceService,private route:Router,private messageService:MessageService, private aRoute : ActivatedRoute) { };
+
+  ngOnInit(){
+
+
+  }
+
   login(value: any) {
     this.service.login(value).subscribe({
       next: (response) => {
-
-        this.loginResponse = response.res;
         console.log('reponse', response);
-
-        this.route.navigate(['home']);
-
+        this.loginResponse = response.status;
+        this.show('success',response.message);
+        if(!(this.loginResponse)){
+          this.visible=false;
+          this.route.navigate(['user/userForm']);
+        }
       },
-      error: (error) => {
-        console.log('error', error);
+      error: (error:HttpErrorResponse) => {
+        console.log('error', error.error);
+        this.show('error',error.error.message);
       }
     })
-    // this.route.navigate(['verifyOTP'])
   }
-
+  show(type:'success' | 'error' ,message:string){
+    this.messageService.add({ severity: type, summary: 'API Response', detail: message });
+  }
 }

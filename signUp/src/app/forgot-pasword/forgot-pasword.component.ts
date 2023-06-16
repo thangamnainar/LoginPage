@@ -24,7 +24,7 @@ export class ForgotPaswordComponent implements OnInit {
     console.log('value', value,);
     this.service.resetPassword(value, getMail, this.getOtp).subscribe({
       next: (response) => {
-        this.getResponse = response.result;
+        this.getResponse = response.status;
         console.log('response', response);
       }, error: (error) => {
         console.log('error', error);

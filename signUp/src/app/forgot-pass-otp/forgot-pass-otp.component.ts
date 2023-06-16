@@ -11,18 +11,18 @@ export class ForgotPassOtpComponent implements OnInit{
 
   verifyotp: string = '';
   otpResponse:any;
+  getMail:any;
   constructor(private service:ServiceService,private router:Router,private activateRouter:ActivatedRoute) { }
 
   ngOnInit(){
-   let  email = localStorage.getItem('email');
+   this.getMail = localStorage.getItem('email');
   }
 
   verifyOtp(value: any) {
     console.log('value', value);
-   let  email = localStorage.getItem('email');
-    this.service.verifyMailOtp(value.verifyotp,email).subscribe({
+    this.service.verifyMailOtp(value.verifyotp,this.getMail).subscribe({
       next: (response) => {
-        this.otpResponse = response.result;
+        this.otpResponse = response.status;
         console.log('response', response);
         if (!(response.result)) {
           this.router.navigate(['forgot-password',value.verifyotp]);
@@ -32,7 +32,16 @@ export class ForgotPassOtpComponent implements OnInit{
         console.log('error', error);
       }
     })
+  }
 
+  reSendMail(){
+    this.service.reSendMail(this.getMail).subscribe({
+      next:(response)=>{
+        console.log('response',response);
+      },error:(error)=>{
+        console.log('error',error);
+      }
+    })
   }
 
 }

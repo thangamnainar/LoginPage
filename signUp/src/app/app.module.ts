@@ -17,7 +17,8 @@ import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.componen
 import { ForgotMailComponent } from './forgot-mail/forgot-mail.component';
 import { ForgotPassOtpComponent } from './forgot-pass-otp/forgot-pass-otp.component';
 import { PasswordModule } from 'primeng/password';
-
+import { ToastModule } from 'primeng/toast';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,9 @@ import { PasswordModule } from 'primeng/password';
     HttpClientModule,
     FormsModule,
     ButtonModule,
-    PasswordModule
+    PasswordModule,
+    ToastModule,
+    BrowserAnimationsModule
   ],
   providers: [ServiceService],
   bootstrap: [AppComponent]

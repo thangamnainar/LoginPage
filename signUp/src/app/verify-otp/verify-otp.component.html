@@ -19,10 +19,9 @@
                         <div class="inputField1">
                             <label htmlFor="username">Enter OTP</label>
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="verifyotp"[(ngModel)]="verifyotp"/><br>
-                            <span *ngIf="otpResponse">Invalid OTP</span>
                         </div>
-                        <div class="">
-                            Didn't get the OTP? <a href="">Resend</a>
+                        <div class="reSendMail-btn">
+                            Didn't get the OTP? <button (click)="reSendMail()">Resend</button> 
                         </div>
                         <div class="button-sign">
                             <p-button label="Next" (click)="verifyOtp(myform.value)"></p-button>
@@ -50,3 +49,4 @@
 
     </div>
 </section>
+<p-toast position="top-center" ></p-toast>

@@ -15,7 +15,6 @@
                         <div class="inputField1">
                             <label>Email ID</label>
                             <input pInputText id="email" aria-describedby="username-help" name="email" placeholder="Email" [(ngModel)]="email" />
-                            <span *ngIf="postResponse">Email already exists</span>
                         </div>
                         <div class="inputField1">
                             <label htmlFor="username">Password</label>
@@ -48,3 +47,4 @@
     </div>
 </section>
 <router-outlet></router-outlet>
+<p-toast position="top-center"></p-toast>

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { VerifyOTPComponent } from './verify-otp/verify-otp.component';
 import { SignupComponent } from './signup/signup.component';
 import { SignInComponent } from './sign-in/sign-in.component';
-import { FormComponent } from './form/form.component';
+import { FormComponent } from '../app/user/form/form.component';
 import { TableComponent } from './table/table.component';
 import { ForgotMailComponent } from './forgot-mail/forgot-mail.component';
 import { ForgotPaswordComponent } from './forgot-pasword/forgot-pasword.component';
@@ -11,21 +11,25 @@ import { ForgotPassOtpComponent } from './forgot-pass-otp/forgot-pass-otp.compon
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  {
-    path:'',redirectTo:'signup',pathMatch:'full'
-  },
+ 
   {
     path:'verifyOTP',component:VerifyOTPComponent
   },
   {
-    path:'sign-in',component:SignInComponent
+    path:'sign-in',component:SignInComponent,
+    // children :[{
+    //   path:'go',component:FormComponent,
+    // }]
   },
   {
-    path:'form/:id',component:FormComponent
+    path:'',redirectTo:'signup',pathMatch:'full'
   },
-  {
-    path:'table',component:TableComponent
-  },
+  // {
+  //   path:'form/:id',component:FormComponent
+  // },
+  // {
+  //   path:'table',component:TableComponent
+  // },
   {
     path:'forgot-mail',component:ForgotMailComponent
   },
@@ -40,23 +44,28 @@ const routes: Routes = [
   }, {
     path:'signup',component:SignupComponent
   },
-  // {
-  //   path:'home',component:HomeComponent ,
-  //   children:[
-  //     {
-  //       path:'sign-in',component:SignInComponent,
-  //       children :[{
-  //         path:'form/:id',component:FormComponent,
-  //         children : [{
-  //           path:'table',component:TableComponent
-  //         }]
-  //       }]
-  //     }, {
-  //       path:'form/:id',component:FormComponent
-  //     }
-  //   ]
+  {
+    path:'home',component:HomeComponent ,
+    // children:[
+    //   {
+    //     path:'sign-in',component:SignInComponent,
+    //     children :[{
+    //       path:'form/:id',component:FormComponent,
+    //       children : [{
+    //         path:'table',component:TableComponent
+    //       }]
+    //     }]
+    //   }, {
+    //     path:'form/:id',component:FormComponent
+    //   }
+    // ]
 
-  // }
+  },
+  {
+    path:'user',
+    loadChildren:()=>import('./user/user.module').then(m=>m.UserModule)
+
+  }
 ];
 
 @NgModule({

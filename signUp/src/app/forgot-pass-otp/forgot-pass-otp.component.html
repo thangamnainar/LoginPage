@@ -21,8 +21,8 @@
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Enter OTP" name="verifyotp"[(ngModel)]="verifyotp"/><br>
                             <span *ngIf="otpResponse">Invalid OTP</span>
                         </div>
-                        <div class="">
-                            Didn't get the OTP? <a href="">Resend</a>
+                        <div class="reSendMail-btn">
+                            Didn't get the OTP? <button type="button" (click)="reSendMail()">Resend</button> 
                         </div>
                         <div class="button-sign">
                             <p-button label="Verify" (click)="verifyOtp(myform.value)"></p-button>

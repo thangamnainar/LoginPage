@@ -17,7 +17,7 @@ export class ForgotMailComponent {
     localStorage.setItem('email', value.email);
     this.service.getMail(value).subscribe({
       next: (response) => {
-        this.getRsponse = response.result;
+        this.getRsponse = response.status;
         if (!(this.getRsponse)) {
           this.router.navigate(['forgot-otp']);
         }
