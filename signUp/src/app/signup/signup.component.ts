@@ -21,8 +21,10 @@ export class SignupComponent {
     this.service.postData(value).subscribe({
       next: (response) => {
         console.log('response', response);
-        if (!(response.status)) {
+        if (response.status) {
           this.route.navigate(['verifyOTP'], { queryParams: { email: value.email } })
+          console.log({ queryParams: { email: value.email } }); 
+          
         }
       },
       error: (error: HttpErrorResponse) => {

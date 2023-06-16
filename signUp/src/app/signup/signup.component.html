@@ -19,7 +19,7 @@
                         <div class="inputField1">
                             <label htmlFor="username">Password</label>
                             <!-- <p-password [(ngModel)]="password" name="password" [toggleMask]="true"></p-password> -->
-                            <input pInputText id="password" aria-describedby="username-help" placeholder="Password" name="password"[(ngModel)]="password"/>
+                            <input pInputText type="password" id="password" aria-describedby="username-help" placeholder="Password" name="password"[(ngModel)]="password"/>
                         </div>
                         <div class="button-sign">
                             <p-button label="Next" (click)="createUser(myform.value)"></p-button>

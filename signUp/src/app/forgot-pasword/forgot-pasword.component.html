@@ -15,7 +15,6 @@
                         <div class="inputField1">
                             <label htmlFor="username">Confirm Password</label>
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Confirm Password" name="password"[(ngModel)]="password"/>
-                            <span *ngIf="getResponse">Some thing wrong</span>
                         </div>
                         <div class="button-sign">
                             <p-button label="Reset Password" (click)="resetPassword(myform.value)"></p-button>
@@ -40,6 +39,6 @@
         <div class="col-6 signInImage">
             <img src="../../assets/Group 6 (1).png" alt="">
         </div>
-
     </div>
 </section>
+<p-toast position="top-center"></p-toast>

@@ -30,9 +30,9 @@ export class SignInComponent implements OnInit{
         console.log('reponse', response);
         this.loginResponse = response.status;
         this.show('success',response.message);
-        if(!(this.loginResponse)){
+        if(this.loginResponse){
           this.visible=false;
-          this.route.navigate(['user/userForm']);
+          // this.route.navigate(['user/userForm']);
         }
       },
       error: (error:HttpErrorResponse) => {

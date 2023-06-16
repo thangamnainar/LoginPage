@@ -19,7 +19,6 @@
                         <div class="inputField1">
                             <label htmlFor="username">Enter OTP</label>
                             <input pInputText id="password" aria-describedby="username-help" placeholder="Enter OTP" name="verifyotp"[(ngModel)]="verifyotp"/><br>
-                            <span *ngIf="otpResponse">Invalid OTP</span>
                         </div>
                         <div class="reSendMail-btn">
                             Didn't get the OTP? <button type="button" (click)="reSendMail()">Resend</button> 
@@ -47,6 +46,6 @@
         <div class="col-6 signInImage">
             <img src="../../assets/Group 6 (1).png" alt="">
         </div>
-
     </div>
 </section>
+<p-toast position="top-center" ></p-toast>

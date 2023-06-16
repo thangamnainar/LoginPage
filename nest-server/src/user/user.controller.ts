@@ -22,16 +22,16 @@ export class UserController {
       // console.log(checkEmail); 
       if (checkEmail) {
         if (checkEmail.isVerified == 1) {
-          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Something went wrong', status: true });
+          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Something went wrong', status: false });
         } else {
           const verifyCode = this.mailerService.generateVerificationCode();
           let generateOtpTime = Date.now();
           const hashPassword = await bcrypt.hash(password, 10);
-          await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, password: hashPassword ,attempt_Time: generateOtpTime});
+          await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, password: hashPassword, attempt_Time: generateOtpTime });
           // console.log("email",email);          
           await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
           console.log('Email sent');
-          return res.status(HttpStatus.OK).json({ message: 'Email not verified' });
+          return res.status(HttpStatus.OK).json({ message: 'Email not verified',status: true });
         }
       } else {
         const hashPassword = await bcrypt.hash(password, 10);
@@ -39,10 +39,10 @@ export class UserController {
         const userCreated = await this.userService.createUser(createUserDto);
         const verification_code = this.mailerService.generateVerificationCode();
         let generateOtpTime = Date.now();
-        await this.userService.updateVerificationCode(userCreated.id, { verification_code: verification_code ,attempt_Time: generateOtpTime});
+        await this.userService.updateVerificationCode(userCreated.id, { verification_code: verification_code, attempt_Time: generateOtpTime });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verification_code}`);
         console.log(userCreated);
-        return res.status(HttpStatus.OK).json({ message: 'user created', status: false });
+        return res.status(HttpStatus.OK).json({ message: 'user created', status: true });
       }
     } catch (err) {
       console.log(err);
@@ -61,20 +61,20 @@ export class UserController {
       const checkEmail = await this.userService.checkEmail(email);
       if (checkEmail) {
         let currentTime = Date.now();
-        console.log(currentTime - +checkEmail.attempt_Time,'""""""""""""""""""""""""""');
-        
-        if((currentTime - +checkEmail.attempt_Time) < maxTime){
-          if (+checkEmail.verification_code === +verifyotp) {
-            this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1, verification_code: null ,attempt_Time: null });
-            return res.status(HttpStatus.OK).json({ message: 'Account Verified', status: false });
+        console.log(currentTime - +checkEmail.attempt_Time, '""""""""""""""""""""""""""');
+        if (+checkEmail.verification_code === +verifyotp) {
+          if ((currentTime - +checkEmail.attempt_Time) < maxTime) {
+            this.userService.updateVerificationCode(checkEmail.id, { isVerified: 1, verification_code: null, attempt_Time: null });
+            return res.status(HttpStatus.OK).json({ message: 'Account Verified', status: true });
           } else {
-            return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Invalid OTP', status: true });
+            return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: ' OTP Expired', status: false });
           }
-        }else{
-          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Expired OTP', status: true });
-        }        
+        } else {
+          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Invalid OTP', status: false });
+        }
+
       } else {
-        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Email not ex ists', status: true });
+        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Email not ex ists', status: false });
       }
     } catch (err) {
       console.log(err);
@@ -97,13 +97,13 @@ export class UserController {
         if (match) {
           if (checkEmail.attempt_Count < 3) {
             await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
-            return res.status(HttpStatus.OK).json({ message: 'login success', status: false });
+            return res.status(HttpStatus.OK).json({ message: 'login success', status: true });
           } else {
             let current_Time = Date.now();
             if ((current_Time - +checkEmail.attempt_Time) > maxTime) {
               await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
               console.log('un Block');
-              return res.status(HttpStatus.OK).json({ message: 'Login Success', status: false });
+              return res.status(HttpStatus.OK).json({ message: 'Login Success', status: true });
             }
             return res.status(HttpStatus.OK).json({ message: 'Blocked', status: true });
           }
@@ -113,10 +113,10 @@ export class UserController {
           let thrrottleCount = checkEmail.attempt_Count;
           await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
           console.log('password not match');
-          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid password', status: true });
+          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid password', status: false });
         }
       } else {
-        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid user Or password', status: true });
+        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid user Or password', status: false });
       }
     } catch (err) {
       console.log(err);
@@ -137,9 +137,9 @@ export class UserController {
         await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
         console.log('Email sent');
-        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: false });
+        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: true });
       } else {
-        return res.status(HttpStatus.OK).json({ message: 'some thing wrong', status: true });
+        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Something went wrong ', status: false });
       }
     } catch (err) {
       console.log(err);
@@ -159,19 +159,19 @@ export class UserController {
 
       const checkEmail = await this.userService.checkEmail(email);
       if (checkEmail) {
-        if ((current_Time2 - +checkEmail.attempt_Time) < maxTime) {
-          // console.log(+checkEmail.attempt_Time);          
-          if (+checkEmail.verification_code === +(verifyotp)) {
-            return res.status(HttpStatus.OK).json({ message: 'otp verified', status: false });
+        // console.log(+checkEmail.attempt_Time);          
+        if (+checkEmail.verification_code === +(verifyotp)) {
+          if ((current_Time2 - +checkEmail.attempt_Time) < maxTime) {
+            return res.status(HttpStatus.OK).json({ message: 'otp verified', status: true });
           } else {
-            return res.status(HttpStatus.OK).json({ message: 'invalid otp', status: true });
+            console.log(+checkEmail.attempt_Time);
+            return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'OTP Expired', status: false });
           }
         } else {
-          console.log(+checkEmail.attempt_Time);
-          return res.status(HttpStatus.OK).json({ message: 'otp expired', status: true });
+          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Invalid OTP', status: false });
         }
       } else {
-        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', status: true });
+        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', status: false });
       }
     } catch (err) {
       console.log(err);
@@ -193,12 +193,12 @@ export class UserController {
           const hash = await bcrypt.hash(password, 10);
           this.userService.updatePassword(checkEmail.id, { verification_code: null, password: hash });
           this.userService.updateVerificationCode(checkEmail.id, { verification_code: null });
-          return res.status(HttpStatus.OK).json({ message: 'update pass successfully', status: false });
+          return res.status(HttpStatus.OK).json({ message: 'Reset password successfully', status: true });
         } else {
-          return res.status(HttpStatus.OK).json({ message: 'invalid otp', status: true });
+          return res.status(HttpStatus.OK).json({ message: 'invalid otp', status: false  });
         }
       } else {
-        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', status: true });
+        return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', status: false });
       }
 
     } catch (err) {
@@ -219,9 +219,9 @@ export class UserController {
         await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
         console.log('Email sent');
-        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: false });
+        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: true });
       } else {
-        return res.status(HttpStatus.OK).json({ message: 'some thing wrong', status: true });
+        return res.status(HttpStatus.OK).json({ message: 'some thing wrong', status: false });
       }
     } catch (err) {
       console.log(err);
