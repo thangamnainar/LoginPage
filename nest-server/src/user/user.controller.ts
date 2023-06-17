@@ -96,12 +96,12 @@ export class UserController {
         const match = await bcrypt.compare(password, checkEmail.password);
         if (match) {
           if (checkEmail.attempt_Count < 3) {
-            await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
+            await this.userService.updateAttemptCount(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
             return res.status(HttpStatus.OK).json({ message: 'login success', status: true });
           } else {
             let current_Time = Date.now();
             if ((current_Time - +checkEmail.attempt_Time) > maxTime) {
-              await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
+              await this.userService.updateAttemptCount(checkEmail.id, { attempt_Count: 0, attempt_Time: null });
               console.log('un Block');
               return res.status(HttpStatus.OK).json({ message: 'Login Success', status: true });
             }
@@ -111,7 +111,7 @@ export class UserController {
           const attempt_Time = Date.now();
           // console.log(attempt_Time);
           let thrrottleCount = checkEmail.attempt_Count;
-          await this.userService.update_Attempt_Count(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
+          await this.userService.updateAttemptCount(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
           console.log('password not match');
           return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid password', status: false });
         }
@@ -201,6 +201,28 @@ export class UserController {
         return res.status(HttpStatus.OK).json({ message: 'Email not ex ists', status: false });
       }
 
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  @Put('signUpReSendMail')
+  async signUpReSendMail(@Req() req: Request, @Res() res: Response, @Body() reSendMailDto: UpdateUserDto) {
+    try {
+      let email = reSendMailDto.email;
+      console.log(email);
+
+      const checkEmail = await this.userService.checkEmail(email);
+      if (checkEmail) {
+        const verifyCode = this.mailerService.generateVerificationCode();
+        let generateOtpTime = Date.now();
+        await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
+        await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
+        console.log('Email sent');
+        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: true });
+      } else {
+        return res.status(HttpStatus.OK).json({ message: 'some thing wrong', status: false });
+      }
     } catch (err) {
       console.log(err);
     }

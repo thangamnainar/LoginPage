@@ -13,6 +13,7 @@ export declare class UserController {
     forgotPassword(req: Request, res: Response, forgotPasswordDto: CreateUserDto): Promise<Response<any, Record<string, any>>>;
     verifyOtpForgotPassword(req: Request, res: Response, updateUserDto: UpdateUserDto): Promise<Response<any, Record<string, any>>>;
     resetPassword(req: Request, res: Response, resetPasswordDto: UpdateUserDto): Promise<Response<any, Record<string, any>>>;
+    signUpReSendMail(req: Request, res: Response, reSendMailDto: UpdateUserDto): Promise<Response<any, Record<string, any>>>;
     reSendMail(req: Request, res: Response, reSendMailDto: any): Promise<Response<any, Record<string, any>>>;
     remove(id: string): string;
 }

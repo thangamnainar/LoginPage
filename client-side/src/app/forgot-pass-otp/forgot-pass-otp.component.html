@@ -1,0 +1,51 @@
+<section>
+    <div class="grid signInPage">
+        <div class="col-6 signForm">
+            <div class="signIN">
+                <div class="signFormLogo">
+                    <img src="../../assets/Frame.svg" alt="">
+                </div>
+                <span class="signInHeader">Verify OTP</span>
+                <div class="signInput">
+                    <form action="" #myform="ngForm">
+                        <!-- <div class="inputField1">
+                            <label>Your Name</label>
+                            <input pInputText id="name" aria-describedby="username-help" placeholder="Name" name="name" [(ngModel)]="name"/>
+                        </div>
+                        <div class="inputField1">
+                            <label>Email ID</label>
+                            <input pInputText id="email" aria-describedby="username-help" name="email" placeholder="Email" [(ngModel)]="email"/>
+                        </div> -->
+                        <div class="inputField1">
+                            <label htmlFor="username">Enter OTP</label>
+                            <input pInputText id="password" aria-describedby="username-help" placeholder="Enter OTP" name="verifyotp"[(ngModel)]="verifyotp"/><br>
+                        </div>
+                        <div class="reSendMail-btn">
+                            Didn't get the OTP? <button type="button" (click)="reSendMail()">Resend</button> 
+                        </div>
+                        <div class="button-sign">
+                            <p-button label="Verify" (click)="verifyOtp(myform.value)"></p-button>
+                        </div>  
+                        <!-- <div class="signInLink">All ready have an Account? <a href="signIn">Sign in</a></div> -->
+                    </form>
+                </div>
+                <div>
+                    <div class="para">
+                        <p>
+                            By Creating an account,you agree to our <a href="">Terms of service</a> and <a
+                                href="">Privacy Policy</a>
+                        </p>
+                    </div>
+                    <div class="CopyRightsPara">
+                        © 2022 NOQU. All rights reserved.
+                    </div>
+                </div>
+            </div>
+            <!-- {{myform.value|json}} -->
+        </div>
+        <div class="col-6 signInImage">
+            <img src="../../assets/Group 6 (1).png" alt="">
+        </div>
+    </div>
+</section>
+<!-- <p-toast position="top-center" ></p-toast> -->

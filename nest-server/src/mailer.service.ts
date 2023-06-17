@@ -11,8 +11,8 @@ export class MailerService {
       port: 2525,
       secure: false,
       auth: {
-        user: '7506ea087cebee',
-        pass: 'c4ca901aee670d',
+        user: '60cc2fe1d38f9b',
+        pass: '514bc49047f320',
       },
     });
   }
