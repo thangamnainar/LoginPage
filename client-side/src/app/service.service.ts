@@ -61,6 +61,8 @@ export class ServiceService {
 
   createUser(postData: any) {
     const Url = 'http://localhost:2000/crud/createUser';
+    console.log('service',postData);
+    
     return this.http.post<any>(Url, postData);
   }
 
@@ -87,7 +89,12 @@ export class ServiceService {
     const Url = 'http://localhost:2000/crud/delete/';
     return this.http.delete<any>(Url+id);
   }
+   // check box
 
+    getCheckBoxData(){
+      const Url = 'http://localhost:2000/crud/bikes';
+      return this.http.get<any>(Url);
+    }
 
 
 }

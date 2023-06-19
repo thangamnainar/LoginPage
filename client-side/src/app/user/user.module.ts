@@ -11,6 +11,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { RadioButtonModule } from 'primeng/radiobutton';
+
 @NgModule({
   declarations: [
     FormComponent,
@@ -25,7 +27,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     CheckboxModule,
     InputTextModule,
     ReactiveFormsModule,
-    InputNumberModule
+    InputNumberModule,
+    RadioButtonModule
  
   ],
   providers: [ServiceService]

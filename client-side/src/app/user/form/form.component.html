@@ -1,54 +1,58 @@
-<div class="form-filed">
-    <form action="" class="form-tag" #myForm="ngForm">
-        <div class="form-group">
-            <label for="name">Name :</label><br><br>
-            <input type="text" pInputText  name="name" placeholder="Enter Name" [(ngModel)]="name" />
-            <!-- <input type="text" name="name" placeholder="Enter Name" [(ngModel)]="name"> -->
-        </div>
-        <div class="form-group">
-            <label for="age">Age :</label><br><br>
-            <input type="text" pInputText  name="age" placeholder="Enter age" [(ngModel)]="age" />
-            <!-- <input type="number" name="age" placeholder="Enter age" [(ngModel)]="age"> -->
-        </div>
-        <div class="form-group">
-            <label feditor="gender">Gender :</label>
-            <label>
-                <input type="radio" name="gender" value="male" [(ngModel)]="gender"> Male
-            </label>
-            <label>
-                <input type="radio" name="gender" value="female" [(ngModel)]="gender"> Female
-            </label>
-            <label>
-                <input type="radio" name="gender" value="other" [(ngModel)]="gender"> Other
-            </label>
-        </div>
-        <div class="form-group">
-            <label for="">Fav Bike :</label><br><br>
-            <div class="flex align-items-center gap-1">
-                <p-checkbox name="group1" value="RE" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>
-                <label for="ny">RE</label>
+<div class="grid">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <form [formGroup]="myForm" action="" class="form-tag">
+            <div class="form-group">
+                <label for="name">Name :</label><br><br>
+                <input type="text" pInputText formControlName="name" placeholder="Enter Name" />
+                <div
+                    *ngIf="myForm.controls['name'].invalid && myForm.controls['name'].touched || myForm.controls['name'].dirty">
+                    <div *ngIf="myForm.controls['name'].errors?.['required']">Name is required</div>
+                    <div *ngIf="myForm.controls['name'].errors?.['minlength']">Name must be at least 3 characters long
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="age">Age :</label><br><br>
+                <p-inputNumber inputId="integeronly" formControlName="age" placeholder="Enter age"></p-inputNumber>
+                <div
+                    *ngIf="myForm.controls['age'].invalid && myForm.controls['age'].touched || myForm.controls['age'].dirty">
+                    <div *ngIf="myForm.controls['age'].errors?.['required']">Age is required.</div>
+                    <div *ngIf="myForm.controls['age'].errors?.['min']">Age must be at least 18.</div>
+                    <div *ngIf="myForm.controls['age'].errors?.['maxLength']">Age must be less than 60.</div>
+                </div>
+            </div>
+            <div class="gender">
+                <label for="gender">Gender :</label><br>
+                <p-radioButton inputId="male" value="Male" name="gender" formControlName="gender"></p-radioButton>
+                <label for="male" class="ml-2">Male</label>
+
+                <p-radioButton inputId="female" value="Female" name="gender" formControlName="gender"></p-radioButton>
+                <label for="female" class="ml-2">Female</label>
+
+                <p-radioButton inputId="other" value="Other" name="gender" formControlName="gender"></p-radioButton>
+                <label for="other" class="ml-2">Other</label>
+            </div>
+            <div class="form-group">
+                <label for="">Fav Bike :</label><br><br>
+                <div class=" p-checkbox" *ngFor="let bike of bikes">
+                    <p-checkbox [formControl]="$any(myForm.get('bikes'))" [value]="$any(bike.id)"
+                        inputId="ny"></p-checkbox>
+                    <label for="ny">{{bike.bike_name}}</label>
+                </div>
             </div>
 
-            <div class="flex align-items-center gap-1">
-                <p-checkbox name="group1" value="RX100" [(ngModel)]="selectedCities" inputId="sf"></p-checkbox>
-                <label for="sf">RX100</label>
+            <div class="form-group">
+                <!-- <div *ngIf="!boolean; else elseBlock"> -->
+                <button id="btn" type="submit" (click)="create()">Create</button>
+                <!-- </div> -->
+                <ng-template #elseBlock>
+                    <button id="btn" type="submit" (click)="update()">Update</button>
+                </ng-template>
             </div>
+        </form>
 
-            <div class="flex align-items-center gap-1">
-                <p-checkbox name="group1" value="R15    " [(ngModel)]="selectedCities" inputId="la"></p-checkbox>
-                <label for="la">R15</label>
-            </div>
-        </div>
-        <div class="form-group">
-            <div *ngIf="!boolean; else elseBlock">
-                <button id="btn" type="submit" (click)="create(myForm.value)">Create</button>
-            </div>
-            <ng-template #elseBlock>
-                <button id="btn" type="submit" (click)="update(myForm.value)">Update</button>
-            </ng-template>
-        </div>
-    </form>
-
+    </div>
     <!-- <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
         <input type="text" formControlName="username">
         <input type="password" formControlName="password">

@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceService } from '../../service.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, NgForm } from '@angular/forms';
+import { FormGroup,FormBuilder,Validators, NgForm } from '@angular/forms';
+import { ThisReceiver } from '@angular/compiler';
+
+interface IBike {
+  id:number,
+  bike_name:string
+}
 
 @Component({
   selector: 'app-form',
@@ -10,17 +16,39 @@ import { FormGroup, FormControl, NgForm } from '@angular/forms';
 })
 export class FormComponent implements OnInit {
 
+  myForm!: FormGroup;
+
   name: string = '';
   age!: number;
   gender: string = '';
   boolean: boolean = false;
   id: any;
-  selectedCities: string[] = [];
+  bikes:Array<IBike> = [];
 
-  constructor(private service: ServiceService, private activateRouter: ActivatedRoute, private router: Router) {
+  constructor(private service: ServiceService, private activateRouter: ActivatedRoute, private router: Router,private fb:FormBuilder) {
    };
 
   ngOnInit() {
+
+    this.myForm = this.fb.group({
+      name: ['', [Validators.required,Validators.minLength(3),Validators.maxLength(10),Validators.pattern('^[a-zA-Z]+$')]],
+      age: ['', [Validators.required,Validators.maxLength(3)]],
+      bikes:['',[Validators.required]],
+      gender:['',[Validators.required]]
+    });
+
+    // checbox data
+
+    this.service.getCheckBoxData().subscribe({
+      next: (response) => {
+        console.log('bikesssssssssssssssssss', response.Data);
+        this.bikes = response.Data;
+      }, error: (error: any) => {
+        console.log('error', error);
+      }
+    })
+    
+
     let id = this.activateRouter.snapshot.paramMap.get('id');
     this.boolean = Boolean(this.activateRouter.snapshot.paramMap.get('boolean'));
 
@@ -34,6 +62,8 @@ export class FormComponent implements OnInit {
             this.name = getData.name;
             this.age = getData.age;
             this.gender = getData.gender;
+            // this.myForm.patchValue(getData)
+
             console.log('response', response);
           }
         }, error: (error) => {
@@ -45,10 +75,10 @@ export class FormComponent implements OnInit {
 
   }
 
-  create(value: any) {
-    console.log(value);
+  create() {
+    console.log(this.myForm.value);
     // console.log(this.selectedCities);
-    this.service.createUser(value).subscribe({
+    this.service.createUser(this.myForm.value).subscribe({
       next: (response) => {
         console.log('response', response);
         this.router.navigate(['home/user/table']);
@@ -60,17 +90,17 @@ export class FormComponent implements OnInit {
   }
 
 
-  update(value: any) {
-    console.log(value, 'formmmmmmmm');
-    this.service.updateUser(this.id, value).subscribe({
-      next: (response) => {
-        console.log('response', response);
-        this.router.navigate(['home/user/table']);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    });
+  update() {
+    // console.log(value, 'formmmmmmmm');
+    // this.service.updateUser(this.id, value).subscribe({
+    //   next: (response) => {
+    //     console.log('response', response);
+    //     this.router.navigate(['home/user/table']);
+    //   },
+    //   error: (error) => {
+    //     console.log(error);
+    //   }
+    // });
   }
 }
 
