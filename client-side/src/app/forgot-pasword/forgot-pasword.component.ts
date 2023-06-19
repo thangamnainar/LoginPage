@@ -13,7 +13,7 @@ export class ForgotPaswordComponent implements OnInit {
   password: string = '';
   getOtp: any;
 
-  constructor(private service: ServiceService, private activateRouter: ActivatedRoute, private messageService:MessageService) { }
+  constructor(private service: ServiceService, private activateRouter: ActivatedRoute, private messageService:MessageService, private router:Router) { }
 
   ngOnInit() {
     this.getOtp = this.activateRouter.snapshot.paramMap.get('otp');
@@ -27,6 +27,7 @@ export class ForgotPaswordComponent implements OnInit {
     this.service.resetPassword(value, getMail, this.getOtp).subscribe({
       next: (response) => {
         this.show('success', response.message);
+        this.router.navigate(['sign-in']);
         console.log('response', response);
       }, error: (error:HttpErrorResponse) => {
         console.log('error', error);

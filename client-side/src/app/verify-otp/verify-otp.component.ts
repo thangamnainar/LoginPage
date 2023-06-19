@@ -22,7 +22,7 @@ export class VerifyOTPComponent implements OnInit{
       next: (response) => {
         this.show('success',response.message);
         if (response.status) {
-          // this.route.navigate(['sign-in']);
+          this.route.navigate(['sign-in']);
         }
         console.log('response', response);
       }, error: (error:HttpErrorResponse) => {
@@ -35,10 +35,11 @@ export class VerifyOTPComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.aRoute.queryParams.subscribe((params): void => {
-      this.email = params['email'];
-      // You can now use the 'email' value in this component
-    });
+    // this.aRoute.queryParams.subscribe((params): void => {
+    //   this.email = params['email'];
+    //   // You can now use the 'email' value in this component
+    // });
+    this.email =localStorage.getItem('email');
     console.log('email',this.email);
   }
 
@@ -48,6 +49,7 @@ export class VerifyOTPComponent implements OnInit{
     this.service.signUpReSendMail(this.email).subscribe({
       next: (response) => {
         console.log('response', response);
+        this.show('success',response.message);
       }, error: (error) => {
         console.log('error', error);
       }
@@ -55,7 +57,7 @@ export class VerifyOTPComponent implements OnInit{
   }
 
   show(type: 'success' | 'error', message: string) {
-    this.messageService.add({ severity: type, summary: 'API Response', detail: message });
+    this.messageService.add({ severity: type, detail: message });
   }
 
 }

@@ -8,7 +8,6 @@ import { MessageService } from 'primeng/api';
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
-  providers: [MessageService]
 })
 export class SignupComponent {
 
@@ -22,9 +21,10 @@ export class SignupComponent {
       next: (response) => {
         console.log('response', response);
         if (response.status) {
-          this.route.navigate(['verifyOTP'], { queryParams: { email: value.email } })
-          console.log({ queryParams: { email: value.email } }); 
-          
+          localStorage.setItem('email', value.email);
+          this.show('success', response.message);
+          this.route.navigate(['verifyOTP'])
+          // console.log({ queryParams: { email: value.email } }); 
         }
       },
       error: (error: HttpErrorResponse) => {
@@ -36,7 +36,7 @@ export class SignupComponent {
   }
 
   show(type: 'success' | 'error', message: string) {
-    this.messageService.add({ severity: type, summary: 'API Response', detail: message });
+    this.messageService.add({ severity: type,  detail: message });
   }
 
 }

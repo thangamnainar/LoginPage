@@ -30,7 +30,7 @@ export class TableComponent implements OnInit{
   edit(id:any){
     console.log(id);
     const boolean = true;
-    this.router.navigate(['user/form',id,boolean]);
+    this.router.navigate(['home/user/form',id,boolean]);
 
   }
 

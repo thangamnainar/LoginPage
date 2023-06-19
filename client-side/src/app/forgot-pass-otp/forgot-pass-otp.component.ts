@@ -40,6 +40,7 @@ export class ForgotPassOtpComponent implements OnInit{
     this.service.reSendMail(this.getMail).subscribe({
       next:(response)=>{
         console.log('response',response);
+        this.show('success', response.message);
       },error:(error)=>{
         console.log('error',error);
       }
@@ -47,6 +48,6 @@ export class ForgotPassOtpComponent implements OnInit{
   }
 
   show(type:'error'|'success',message:string){
-    this.messageService.add({severity:type, summary:'API Response', detail:message});
+    this.messageService.add({severity:type, detail:message});
   }
 }

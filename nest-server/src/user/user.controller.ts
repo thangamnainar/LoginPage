@@ -31,7 +31,7 @@ export class UserController {
           // console.log("email",email);          
           await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
           console.log('Email sent');
-          return res.status(HttpStatus.OK).json({ message: 'Email not verified',status: true });
+          return res.status(HttpStatus.OK).json({ message: 'Check Your Mail',status: true });
         }
       } else {
         const hashPassword = await bcrypt.hash(password, 10);
@@ -105,7 +105,9 @@ export class UserController {
               console.log('un Block');
               return res.status(HttpStatus.OK).json({ message: 'Login Success', status: true });
             }
-            return res.status(HttpStatus.OK).json({ message: 'Blocked', status: true });
+            console.log('blocked');
+            
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Your Too many long incorrect password', status: false });
           }
         } else {
           const attempt_Time = Date.now();
@@ -113,7 +115,7 @@ export class UserController {
           let thrrottleCount = checkEmail.attempt_Count;
           await this.userService.updateAttemptCount(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
           console.log('password not match');
-          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid password', status: false });
+          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid user Or password', status: false });
         }
       } else {
         return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid user Or password', status: false });
@@ -137,7 +139,7 @@ export class UserController {
         await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
         console.log('Email sent');
-        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: true });
+        return res.status(HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
       } else {
         return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Something went wrong ', status: false });
       }
@@ -219,7 +221,7 @@ export class UserController {
         await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
         console.log('Email sent');
-        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: true });
+        return res.status(HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
       } else {
         return res.status(HttpStatus.OK).json({ message: 'some thing wrong', status: false });
       }
@@ -241,7 +243,7 @@ export class UserController {
         await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
         await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
         console.log('Email sent');
-        return res.status(HttpStatus.OK).json({ message: 'Email sent', status: true });
+        return res.status(HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
       } else {
         return res.status(HttpStatus.OK).json({ message: 'some thing wrong', status: false });
       }

@@ -40,6 +40,6 @@ export class SignInComponent implements OnInit{
     })
   }
   show(type:'success' | 'error' ,message:string){
-    this.messageService.add({ severity: type, summary: 'API Response', detail: message });
+    this.messageService.add({ severity: type, detail: message });
   }
 }

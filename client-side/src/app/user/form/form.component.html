@@ -1,34 +1,59 @@
 <div class="form-filed">
-    <form action="" class="form-tag"  #myForm="ngForm">
+    <form action="" class="form-tag" #myForm="ngForm">
         <div class="form-group">
-            <label for="">Name :</label>
-            <input type="text" name="name" placeholder="Enter Name" [(ngModel)]="name">
+            <label for="name">Name :</label><br><br>
+            <input type="text" pInputText  name="name" placeholder="Enter Name" [(ngModel)]="name" />
+            <!-- <input type="text" name="name" placeholder="Enter Name" [(ngModel)]="name"> -->
         </div>
         <div class="form-group">
-            <label for="">Age :</label>
-            <input type="number" name="age" placeholder="Enter age" [(ngModel)]="age">
+            <label for="age">Age :</label><br><br>
+            <input type="text" pInputText  name="age" placeholder="Enter age" [(ngModel)]="age" />
+            <!-- <input type="number" name="age" placeholder="Enter age" [(ngModel)]="age"> -->
         </div>
         <div class="form-group">
-            <label feditor="">Gender :</label>
+            <label feditor="gender">Gender :</label>
             <label>
-                <input type="radio" name="gender" value="male"  [(ngModel)]="gender"> Male
+                <input type="radio" name="gender" value="male" [(ngModel)]="gender"> Male
             </label>
             <label>
-                <input type="radio" name="gender" value="female"  [(ngModel)]="gender"> Female
+                <input type="radio" name="gender" value="female" [(ngModel)]="gender"> Female
             </label>
             <label>
-                <input type="radio" name="gender" value="other"  [(ngModel)]="gender"> Other
+                <input type="radio" name="gender" value="other" [(ngModel)]="gender"> Other
             </label>
+        </div>
+        <div class="form-group">
+            <label for="">Fav Bike :</label><br><br>
+            <div class="flex align-items-center gap-1">
+                <p-checkbox name="group1" value="RE" [(ngModel)]="selectedCities" inputId="ny"></p-checkbox>
+                <label for="ny">RE</label>
+            </div>
+
+            <div class="flex align-items-center gap-1">
+                <p-checkbox name="group1" value="RX100" [(ngModel)]="selectedCities" inputId="sf"></p-checkbox>
+                <label for="sf">RX100</label>
+            </div>
+
+            <div class="flex align-items-center gap-1">
+                <p-checkbox name="group1" value="R15    " [(ngModel)]="selectedCities" inputId="la"></p-checkbox>
+                <label for="la">R15</label>
+            </div>
         </div>
         <div class="form-group">
             <div *ngIf="!boolean; else elseBlock">
-                <button id="btn" type="submit"  (click)="create(myForm.value)">Create</button>
-            </div> 
+                <button id="btn" type="submit" (click)="create(myForm.value)">Create</button>
+            </div>
             <ng-template #elseBlock>
                 <button id="btn" type="submit" (click)="update(myForm.value)">Update</button>
             </ng-template>
         </div>
     </form>
+
+    <!-- <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+        <input type="text" formControlName="username">
+        <input type="password" formControlName="password">
+      </form> -->
+
 </div>
 
 <!-- {{myForm.value | json}} -->

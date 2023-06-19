@@ -7,7 +7,10 @@ import { TableComponent } from './table/table.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-
+import { CheckboxModule } from 'primeng/checkbox';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 @NgModule({
   declarations: [
     FormComponent,
@@ -19,6 +22,10 @@ import { TableModule } from 'primeng/table';
     HttpClientModule,
     FormsModule,
     TableModule,
+    CheckboxModule,
+    InputTextModule,
+    ReactiveFormsModule,
+    InputNumberModule
  
   ],
   providers: [ServiceService]

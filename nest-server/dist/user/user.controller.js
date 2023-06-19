@@ -41,7 +41,7 @@ let UserController = exports.UserController = class UserController {
                     await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, password: hashPassword, attempt_Time: generateOtpTime });
                     await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
                     console.log('Email sent');
-                    return res.status(common_1.HttpStatus.OK).json({ message: 'Email not verified', status: true });
+                    return res.status(common_1.HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
                 }
             }
             else {
@@ -110,7 +110,8 @@ let UserController = exports.UserController = class UserController {
                             console.log('un Block');
                             return res.status(common_1.HttpStatus.OK).json({ message: 'Login Success', status: true });
                         }
-                        return res.status(common_1.HttpStatus.OK).json({ message: 'Blocked', status: true });
+                        console.log('blocked');
+                        return res.status(common_1.HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Your Too many long incorrect password', status: false });
                     }
                 }
                 else {
@@ -118,7 +119,7 @@ let UserController = exports.UserController = class UserController {
                     let thrrottleCount = checkEmail.attempt_Count;
                     await this.userService.updateAttemptCount(checkEmail.id, { attempt_Count: thrrottleCount + 1, attempt_Time: attempt_Time });
                     console.log('password not match');
-                    return res.status(common_1.HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid password', status: false });
+                    return res.status(common_1.HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'invalid user Or password', status: false });
                 }
             }
             else {
@@ -140,7 +141,7 @@ let UserController = exports.UserController = class UserController {
                 await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
                 await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
                 console.log('Email sent');
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email sent', status: true });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
             }
             else {
                 return res.status(common_1.HttpStatus.UNPROCESSABLE_ENTITY).json({ message: 'Something went wrong ', status: false });
@@ -215,7 +216,7 @@ let UserController = exports.UserController = class UserController {
                 await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
                 await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
                 console.log('Email sent');
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email sent', status: true });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
             }
             else {
                 return res.status(common_1.HttpStatus.OK).json({ message: 'some thing wrong', status: false });
@@ -236,7 +237,7 @@ let UserController = exports.UserController = class UserController {
                 await this.userService.updateVerificationCode(checkEmail.id, { verification_code: verifyCode, attempt_Time: generateOtpTime });
                 await this.mailerService.sendMail(email, 'Verify Email', `Please verify your email ${verifyCode}`);
                 console.log('Email sent');
-                return res.status(common_1.HttpStatus.OK).json({ message: 'Email sent', status: true });
+                return res.status(common_1.HttpStatus.OK).json({ message: 'Check Your Mail', status: true });
             }
             else {
                 return res.status(common_1.HttpStatus.OK).json({ message: 'some thing wrong', status: false });

@@ -38,8 +38,11 @@ const routes: Routes = [
   {
     path:'home',component:HomeComponent ,
     children:[
-      { path: 'user/form', component: FormComponent },
-      { path: 'user/table', component: TableComponent },
+      {
+        path:'user',
+        loadChildren:()=>import('./user/user.module').then(m=>m.UserModule)
+    
+      }
     //   {
     //     path:'sign-in',component:SignInComponent,
     //     children :[{
@@ -54,11 +57,7 @@ const routes: Routes = [
     ]
 
   },
-  {
-    path:'user',
-    loadChildren:()=>import('./user/user.module').then(m=>m.UserModule)
-
-  }
+ 
 ];
 
 @NgModule({

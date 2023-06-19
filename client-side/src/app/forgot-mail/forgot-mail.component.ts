@@ -19,6 +19,7 @@ export class ForgotMailComponent {
     this.service.getMail(value).subscribe({
       next: (response) => {
         if (response.status) {
+          this.show('success', response.message);
           this.router.navigate(['forgot-otp']);
         }
         // console.log('response', response);        

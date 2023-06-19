@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceService } from '../../service.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormControl, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-form',
@@ -14,8 +15,10 @@ export class FormComponent implements OnInit {
   gender: string = '';
   boolean: boolean = false;
   id: any;
+  selectedCities: string[] = [];
 
-  constructor(private service: ServiceService, private activateRouter: ActivatedRoute, private router: Router) { };
+  constructor(private service: ServiceService, private activateRouter: ActivatedRoute, private router: Router) {
+   };
 
   ngOnInit() {
     let id = this.activateRouter.snapshot.paramMap.get('id');
@@ -31,7 +34,7 @@ export class FormComponent implements OnInit {
             this.name = getData.name;
             this.age = getData.age;
             this.gender = getData.gender;
-            console.log('response', getData.name);
+            console.log('response', response);
           }
         }, error: (error) => {
           console.log('error', error);
@@ -44,10 +47,11 @@ export class FormComponent implements OnInit {
 
   create(value: any) {
     console.log(value);
+    // console.log(this.selectedCities);
     this.service.createUser(value).subscribe({
       next: (response) => {
         console.log('response', response);
-        this.router.navigate(['user/table']);
+        this.router.navigate(['home/user/table']);
       },
       error: (error) => {
         console.log(error);
@@ -61,7 +65,7 @@ export class FormComponent implements OnInit {
     this.service.updateUser(this.id, value).subscribe({
       next: (response) => {
         console.log('response', response);
-        this.router.navigate(['user/table']);
+        this.router.navigate(['home/user/table']);
       },
       error: (error) => {
         console.log(error);

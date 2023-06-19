@@ -13,7 +13,7 @@ export class UserService {
   ) {}
 
   async checkEmail(email: string) {
-    return await this.userRepository.findOne({where: {email:email},select: ['id','email','password','isVerified','verification_code','attempt_Count','attempt_Time']}) ;
+    return await this.userRepository.findOne({select: ['id','email','password','isVerified','verification_code','attempt_Count','attempt_Time'],where: {email:email}}) ;
   }
 
   async createUser(createUserDto: any) {        
