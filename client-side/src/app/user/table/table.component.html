@@ -6,6 +6,7 @@
                 <th>Name</th>
                 <th>Age</th>
                 <th>Gender</th>
+                <th>Fav_Bikes</th>
                 <th>Action</th>
             </tr>
         </ng-template>
@@ -15,6 +16,7 @@
                 <td>{{user.name}}</td>
                 <td>{{user.age}}</td>
                 <td>{{user.gender}}</td>
+                <td>{{user.bikes}}</td>
                 <td><button (click)="edit(user.id)">Edit</button> <button (click)="delete(user.id)">Delete</button></td>
             </tr>
         </ng-template>
