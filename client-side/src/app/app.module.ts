@@ -20,6 +20,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { NoqHomeComponent } from './noq-home/noq-home.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HomeComponent,
     ForgotPaswordComponent,
     ForgotMailComponent,
-    ForgotPassOtpComponent
+    ForgotPassOtpComponent,
+    NoqHomeComponent
   ],
   imports: [
     BrowserModule,
